@@ -1,0 +1,25 @@
+SCHOOL ERP - WINDOWS DESKTOP BUILD
+
+Development test:
+  npm install
+  npm start
+
+Create Windows installer:
+  npm install
+  npm run build
+
+The installer will be created in the dist folder.
+
+LICENSING FLOW
+1. On an unlicensed PC, School ERP shows an Activation screen.
+2. Customer sends the displayed Machine Code to the seller.
+3. Seller uses the separate private License Generator package.
+4. Seller sends the generated license code to the customer.
+5. Customer pastes it and activates.
+6. The signed license is stored under Electron userData/License/license.dat.
+7. Copying the license/application to a different Windows installation fails because the Machine Code differs.
+
+SECURITY NOTES
+- The customer package contains ONLY the RSA public key.
+- Never distribute private.pem or the Seller License Generator.
+- Fully offline Electron apps cannot be made absolutely uncrackable; code signing/obfuscation can be added later.

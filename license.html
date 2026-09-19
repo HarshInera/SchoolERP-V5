@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>School ERP Activation</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,"Segoe UI",Arial,sans-serif;background:#f1f5f9;color:#0f172a;min-height:100vh;display:grid;place-items:center}.card{width:min(620px,92vw);background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:30px;box-shadow:0 24px 70px rgba(15,23,42,.12)}h1{margin:0 0 8px;font-size:26px}p{color:#64748b;line-height:1.5}.label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:#475569;margin:22px 0 7px}.machine{padding:14px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;font-family:Consolas,monospace;font-weight:700;user-select:all}textarea{width:100%;min-height:125px;resize:vertical;border:1px solid #cbd5e1;border-radius:10px;padding:12px;font-family:Consolas,monospace;outline:none}textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px #dbeafe}.actions{display:flex;gap:10px;margin-top:14px}.btn{border:0;border-radius:9px;padding:11px 17px;font-weight:750;cursor:pointer;background:#1d4ed8;color:#fff}.btn.secondary{background:#e2e8f0;color:#0f172a}.msg{margin-top:15px;padding:11px 13px;border-radius:9px;display:none}.error{display:block;background:#fef2f2;color:#991b1b;border:1px solid #fecaca}.ok{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}.small{font-size:12px;color:#94a3b8;margin-top:18px}</style>
+</head>
+<body>
+<div class="card">
+<h1>School ERP Activation</h1>
+<p>This copy is locked to this computer. Send the Machine Code to the software vendor and enter the license code you receive.</p>
+<div class="label">Machine Code</div><div id="machine" class="machine">Loading...</div>
+<div class="actions"><button class="btn secondary" onclick="copyMachine()">Copy Machine Code</button></div>
+<div class="label">License Code</div><textarea id="code" placeholder="Paste license code here"></textarea>
+<div class="actions"><button class="btn" onclick="activate()">Activate Software</button></div>
+<div id="msg" class="msg"></div>
+<div class="small">Offline activation • License is valid only for this computer.</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+async function init(){const s=await window.schoolAPI.getLicenseStatus();$('machine').textContent=s.machineCode;if(s.message)show(s.message,false)}
+function show(t,ok){$('msg').textContent=t;$('msg').className='msg '+(ok?'ok':'error')}
+async function copyMachine(){try{await navigator.clipboard.writeText($('machine').textContent);show('Machine Code copied.',true)}catch{show('Select and copy the Machine Code manually.',false)}}
+async function activate(){const code=$('code').value.trim();if(!code){show('Enter the license code.',false);return}const r=await window.schoolAPI.activateLicense(code);if(!r.success){show(r.message||'Activation failed.',false);return}show('Activation successful. Opening School ERP...',true)}
+init();
+</script>
+</body></html>

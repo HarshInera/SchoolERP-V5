@@ -1,0 +1,10797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>School ERP V5 - Offline</title>
+
+<style>
+:root{
+ --nav:#172554;
+ --blue:#2563eb;
+ --green:#16a34a;
+ --red:#dc2626;
+ --purple:#7c3aed;
+ --orange:#ea580c;
+ --bg:#f3f6fb;
+ --border:#dbe2ea;
+ --text:#1e293b;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+/* LOGIN */
+#login{
+ min-height:100vh;display:flex;align-items:center;justify-content:center;
+ background:linear-gradient(135deg,#172554,#2563eb)
+}
+.loginbox{
+ width:390px;background:#fff;padding:35px;border-radius:16px;
+ box-shadow:0 20px 70px #0005
+}
+.loginbox h1{margin:0;color:#172554}
+.loginbox p{color:#64748b}
+.loginbox input{margin:6px 0}
+
+/* APP */
+.sidebar{
+ position:fixed;left:0;top:0;width:250px;height:100vh;
+ background:var(--nav);padding:18px 12px;color:#fff;overflow:auto
+}
+.brand{text-align:center;padding:12px 5px 25px}
+.brand h2{font-size:18px;margin:0}
+.brand small{opacity:.7}
+.nav{
+ width:100%;border:0;background:transparent;color:#fff;text-align:left;
+ padding:12px 14px;border-radius:8px;margin:2px 0
+}
+.nav:hover,.nav.active{background:var(--blue)}
+.main{margin-left:250px;padding:24px}
+.page{display:none}.page.active{display:block}
+
+.topbar,.panel{
+ background:#fff;border-radius:12px;padding:20px;margin-bottom:18px;
+ box-shadow:0 3px 15px #0000000c
+}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.topbar h2{margin:0}
+.muted{color:#64748b;font-size:13px}
+
+.cards{
+ display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px
+}
+.card{
+ background:#fff;padding:20px;border-radius:12px;
+ box-shadow:0 3px 15px #0000000c
+}
+.card small{color:#64748b}
+.card h2{font-size:27px;margin:8px 0 0}
+.card.paid h2{color:#16a34a}
+.card.due h2{color:#dc2626}
+.card.concession h2{color:#7c3aed}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+
+input,select,textarea{
+ width:100%;padding:10px 12px;border:1px solid #cbd5e1;
+ border-radius:7px;background:#fff
+}
+textarea{min-height:80px}
+
+.btn{
+ border:0;padding:10px 15px;border-radius:7px;background:var(--blue);color:#fff
+}
+.green{background:var(--green)}
+.red{background:var(--red)}
+.gray{background:#64748b}
+.purple{background:var(--purple)}
+.orange{background:var(--orange)}
+.small{padding:6px 9px;font-size:12px}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{padding:9px;border:1px solid #e2e8f0;text-align:left;font-size:13px}
+th{background:#f8fafc}
+
+.search-result{
+ padding:13px;border:1px solid var(--border);border-radius:8px;
+ margin:8px 0;display:flex;justify-content:space-between;align-items:center;gap:10px
+}
+
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin:15px 0}
+.tab{
+ border:0;background:#e2e8f0;padding:9px 13px;border-radius:7px
+}
+.tab.active{background:var(--blue);color:#fff}
+.ptab{display:none}.ptab.active{display:block}
+
+.student-header{
+ display:flex;justify-content:space-between;align-items:flex-start;gap:20px
+}
+.student-id{
+ background:#eff6ff;color:#1d4ed8;padding:10px 14px;border-radius:8px
+}
+
+.student-fee-summary{
+ display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:15px 0
+}
+.student-fee-summary>div{
+ background:#f8fafc;border:1px solid #e2e8f0;
+ border-radius:10px;padding:15px
+}
+.student-fee-summary small{color:#64748b}
+.student-fee-summary strong{
+ display:block;font-size:21px;margin-top:5px
+}
+.student-fee-summary .paid strong{color:#16a34a}
+.fee-search-row{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(220px,1fr);gap:12px;align-items:end}
+.fee-report-toolbar{display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:10px;align-items:end}
+.report-summary{display:flex;gap:18px;flex-wrap:wrap;margin:12px 0;color:#475569;font-size:13px}
+.report-summary strong{color:#0f172a}
+@media(max-width:900px){.fee-search-row,.fee-report-toolbar{grid-template-columns:1fr}}
+
+.student-fee-summary .due strong{color:#dc2626}
+.student-fee-summary .concession strong{color:#7c3aed}
+
+.concession-info{
+ background:#faf5ff;border:1px solid #e9d5ff;
+ padding:10px 14px;border-radius:8px;margin-bottom:15px
+}
+
+.subject-checkbox-grid{
+ display:grid;grid-template-columns:repeat(4,1fr);gap:10px
+}
+.subject-check{
+ display:flex;align-items:center;gap:8px;background:#f8fafc;
+ border:1px solid #e2e8f0;padding:10px;border-radius:7px
+}
+.subject-check input{width:auto}
+
+.exam-table input{min-width:70px;padding:7px}
+.section-title{
+ background:#172554;color:#fff;padding:9px 12px;
+ border-radius:6px;margin-top:18px
+}
+
+.print-document{display:none}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+ .cards{grid-template-columns:repeat(2,1fr)}
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .student-fee-summary{grid-template-columns:repeat(2,1fr)}
+ .subject-checkbox-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* =====================================================
+ PRINT - A4
+===================================================== */
+
+
+@media print{
+
+ @page{
+  size:A4 portrait;
+  margin:3mm;
+ }
+
+ html,
+ body{
+  margin:0 !important;
+  padding:0 !important;
+  background:#fff !important;
+  width:100% !important;
+ }
+
+ /* SOFTWARE UI HIDE */
+/* =====================================================
+ PRINT
+===================================================== */
+
+
+@media print{
+
+ @page{
+  size:A4 portrait;
+  margin:3mm;
+ }
+
+
+}
+
+
+ /* Print area show only while printing */
+
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  background:#fff !important;
+ }
+
+ .result-a4{
+  width:202mm !important;
+  min-height:280mm !important;
+  margin:0 auto !important;
+  page-break-inside:avoid !important;
+  break-inside:avoid !important;
+ }
+
+ .result-a4 table{
+  page-break-inside:avoid !important;
+  break-inside:avoid !important;
+ }
+
+}
+
+ /* PRINT AREA ONLY SHOW */
+
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  background:#fff !important;
+ }
+
+
+ /* RESULT A4 */
+
+ .result-a4{
+  width:202mm !important;
+  min-height:280mm !important;
+  max-height:none !important;
+  overflow:visible !important;
+  margin:0 auto !important;
+  page-break-inside:avoid !important;
+  break-inside:avoid !important;
+ }
+
+ .result-a4 table{
+  page-break-inside:avoid !important;
+  break-inside:avoid !important;
+ }
+
+}
+ body{
+  margin:0!important;
+  padding:0!important;
+  background:#fff!important;
+ }
+ 
+ .print-document{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+ }
+ .result-a4{
+  width:202mm!important;
+  height:288mm!important;
+  max-height:288mm!important;
+  overflow:hidden!important;
+  page-break-inside:avoid!important;
+  break-inside:avoid!important;
+ }
+ .result-a4 table{
+  page-break-inside:avoid!important;
+ }
+}
+</style>
+
+<style id="modern-ui-v1">
+/* =====================================================
+   MODERN UI 2026 — visual layer only
+   Existing IDs, JS functions and SQLite logic unchanged
+===================================================== */
+:root{
+ --nav:#0f172a;--nav2:#111c33;--blue:#2563eb;--blue2:#1d4ed8;
+ --green:#059669;--red:#dc2626;--purple:#7c3aed;--orange:#ea580c;
+ --bg:#f4f7fb;--surface:#ffffff;--surface2:#f8fafc;
+ --border:#e2e8f0;--text:#0f172a;--muted:#64748b;
+ --radius:14px;--shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.45}
+button,input,select,textarea{font-family:inherit}
+
+/* Login */
+#login{background:radial-gradient(circle at 20% 20%,#2563eb 0,transparent 32%),linear-gradient(135deg,#0f172a 0%,#172554 55%,#1e3a8a 100%);padding:24px}
+.loginbox{width:min(430px,100%);padding:38px;border:1px solid rgba(255,255,255,.65);border-radius:22px;box-shadow:0 30px 80px rgba(2,6,23,.35)}
+.loginbox h1{font-size:28px;letter-spacing:-.5px;margin-bottom:6px}.loginbox p{margin-top:4px}
+.loginbox input{height:46px;margin:7px 0}.loginbox .btn{height:46px}
+
+/* Sidebar */
+.sidebar{width:268px;padding:18px 14px;background:linear-gradient(180deg,var(--nav) 0%,#101b31 100%);border-right:1px solid rgba(255,255,255,.05);box-shadow:8px 0 30px rgba(15,23,42,.08)}
+.brand{text-align:left;padding:12px 12px 22px;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand h2{font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand small{display:inline-block;margin-top:5px;color:#93c5fd;opacity:1;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.nav{position:relative;display:flex;align-items:center;min-height:44px;padding:11px 13px;margin:4px 0;border-radius:10px;color:#cbd5e1;font-weight:600;transition:.18s ease}
+.nav:hover{background:rgba(255,255,255,.07);color:#fff;transform:translateX(2px)}
+.nav.active{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 8px 20px rgba(37,99,235,.28)}
+
+/* Main */
+.main{margin-left:268px;padding:26px 30px 44px;max-width:1800px}
+.page{animation:pageIn .18s ease}@keyframes pageIn{from{opacity:.35;transform:translateY(3px)}to{opacity:1;transform:none}}
+.topbar{min-height:76px;padding:18px 22px;margin-bottom:20px;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.topbar h2{font-size:22px;letter-spacing:-.35px}.topbar b{color:#334155;background:#f1f5f9;border:1px solid #e2e8f0;padding:8px 12px;border-radius:9px;font-size:12px}
+.muted{color:var(--muted);font-size:12.5px}
+
+/* Panels */
+.panel{padding:22px;margin-bottom:20px;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.panel>h3:first-child{font-size:16px;margin:0 0 18px;padding-bottom:13px;border-bottom:1px solid #eef2f7;letter-spacing:-.15px}
+.panel h4{color:#334155}
+.section-title{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0;border-left:4px solid var(--blue);padding:10px 13px;border-radius:8px;font-weight:700}
+
+/* Dashboard cards */
+.cards{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:16px}
+.card{position:relative;min-height:112px;padding:19px 20px;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#94a3b8}
+.card.paid:before{background:var(--green)}.card.due:before{background:var(--red)}.card.concession:before{background:var(--purple)}
+.card small{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.035em}
+.card h2{font-size:25px;line-height:1.15;margin:12px 0 0;letter-spacing:-.5px}
+
+/* Forms */
+.grid,.grid2{gap:14px}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+input,select,textarea{min-height:42px;padding:9px 12px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;color:#0f172a;outline:none;transition:border-color .15s,box-shadow .15s,background .15s}
+input:hover,select:hover,textarea:hover{border-color:#94a3b8}
+input:focus,select:focus,textarea:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+input::placeholder,textarea::placeholder{color:#94a3b8}
+input[readonly]{background:#f8fafc;color:#64748b}
+label{color:#334155;font-size:12.5px}
+
+/* Buttons */
+.btn{min-height:39px;padding:9px 14px;border-radius:9px;background:var(--blue);font-weight:700;font-size:13px;box-shadow:0 1px 2px rgba(15,23,42,.08);transition:transform .12s,box-shadow .12s,filter .12s}
+.btn:hover{filter:brightness(.96);box-shadow:0 5px 14px rgba(15,23,42,.12);transform:translateY(-1px)}
+.btn:active{transform:translateY(0);box-shadow:none}.btn.green{background:var(--green)}.btn.red{background:var(--red)}.btn.gray{background:#475569}.btn.purple{background:var(--purple)}.btn.orange{background:var(--orange)}
+.btn.small{min-height:30px;padding:5px 9px;border-radius:7px;font-size:11.5px}.actions{gap:9px}
+
+/* Tables */
+.panel>table,.panel>div>table{margin-top:16px}
+table{border-collapse:separate;border-spacing:0;width:100%;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+th,td{padding:11px 12px;border:0;border-bottom:1px solid #edf2f7;text-align:left;font-size:12.5px;vertical-align:middle}
+th{background:#f8fafc;color:#475569;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.035em;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}tbody tr:hover td{background:#fafcff}
+
+/* Student & subject components */
+.search-result{padding:14px 15px;border-color:var(--border);border-radius:10px;background:#fff;box-shadow:0 1px 2px rgba(15,23,42,.03)}
+.tabs{gap:7px;border-bottom:1px solid #e2e8f0;padding-bottom:9px}.tab{background:#f1f5f9;color:#475569;font-weight:700;border-radius:8px}.tab.active{background:#dbeafe;color:#1d4ed8}
+.student-header{padding-bottom:15px;border-bottom:1px solid #eef2f7}.student-id{background:#eff6ff;border:1px solid #dbeafe;border-radius:9px;font-weight:700}
+.student-fee-summary{gap:12px}.student-fee-summary>div{background:#fff;border:1px solid var(--border);border-radius:11px;padding:15px;box-shadow:0 1px 2px rgba(15,23,42,.03)}
+.subject-checkbox-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.subject-check{min-height:43px;background:#f8fafc;border-color:#e2e8f0;border-radius:9px;padding:9px 11px}.subject-check:has(input:checked){background:#eff6ff;border-color:#93c5fd;color:#1d4ed8}.subject-check input{accent-color:#2563eb}
+.concession-info{border-radius:10px}
+
+/* Custom notification/modal */
+#appMessage{font-family:Inter,"Segoe UI",Arial,sans-serif!important;border-radius:12px!important;box-shadow:0 18px 50px rgba(15,23,42,.18)!important}
+#appConfirmOverlay>div{border-radius:16px!important;box-shadow:0 24px 80px rgba(15,23,42,.28)!important}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#cbd5e1;border:3px solid transparent;background-clip:padding-box;border-radius:20px}.sidebar::-webkit-scrollbar-thumb{background:#334155;border:3px solid transparent;background-clip:padding-box}
+
+/* Responsive */
+@media(max-width:1250px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.subject-checkbox-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){.sidebar{width:220px}.main{margin-left:220px;padding:20px}.grid,.grid2{grid-template-columns:1fr}.subject-checkbox-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.student-fee-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.sidebar{position:relative;width:100%;height:auto;display:flex;gap:5px;overflow-x:auto;padding:10px}.brand{display:none}.nav{width:auto;min-width:max-content;margin:0}.main{margin-left:0;padding:14px}.cards{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.subject-checkbox-grid,.student-fee-summary{grid-template-columns:1fr}.panel{padding:16px;overflow-x:auto}}
+
+/* Keep print output isolated from screen redesign */
+@media print{.sidebar,.main>.page:not(.active),#appMessage,#appConfirmOverlay{box-shadow:none!important}}
+</style>
+
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+ <div class="loginbox">
+  <h1>🏫 School ERP</h1>
+  <p>Offline School Management System</p>
+
+  <input id="loginUser" value="admin" placeholder="Username">
+  <input id="loginPassword" type="password" placeholder="Password">
+
+  <button class="btn" style="width:100%;margin-top:10px" onclick="doLogin()">
+   Login
+  </button>
+
+  <p class="muted">Default Login: admin / admin123</p>
+ </div>
+</div>
+
+<!-- APPLICATION -->
+<div id="application" class="hidden">
+
+<div class="sidebar">
+
+ <div class="brand">
+  <h2 id="brandSchool">SCHOOL ERP</h2>
+  <small>100% Offline</small>
+ </div>
+
+ <button class="nav active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
+ <button class="nav" onclick="showPage('students',this)">👨‍🎓 Students</button>
+ <button class="nav" onclick="showPage('feeCollection',this)">💰 Fee Collection</button>
+ <button class="nav" onclick="showPage('attendance',this)">📅 Attendance</button>
+ <button class="nav" onclick="showPage('resultEntry',this)">📝 Result Entry</button>
+ <button class="nav" onclick="showPage('backup',this)">💾 Backup / Reports</button>
+ <button class="nav" onclick="showPage('admin',this)">⚙️ Admin / Setup</button>
+ <button class="nav" onclick="logout()">🚪 Logout</button>
+
+</div>
+
+<div class="main">
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page active">
+
+ <div class="topbar">
+  <div>
+   <h2>Dashboard</h2>
+   <div class="muted" id="dashboardSchool"></div>
+  </div>
+  <b id="dashboardSession"></b>
+ </div>
+
+ <div class="cards">
+
+  <div class="card">
+   <small>Total Students</small>
+   <h2 id="dashStudents">0</h2>
+  </div>
+
+  <div class="card">
+   <small>Gross School Fees</small>
+   <h2 id="dashGrossFee">₹0</h2>
+  </div>
+
+  <div class="card concession">
+   <small>Total Concession</small>
+   <h2 id="dashConcession">₹0</h2>
+  </div>
+
+  <div class="card">
+   <small>Net Payable Fees</small>
+   <h2 id="dashTotalFee">₹0</h2>
+  </div>
+
+ </div>
+
+ <div class="cards">
+
+  <div class="card paid">
+   <small>Total Collection</small>
+   <h2 id="dashCollection">₹0</h2>
+  </div>
+
+  <div class="card due">
+   <small>Total Due</small>
+   <h2 id="dashDue">₹0</h2>
+  </div>
+
+  <div class="card paid">
+   <small>Today's Collection</small>
+   <h2 id="dashToday">₹0</h2>
+  </div>
+
+  <div class="card">
+   <small>This Month Collection</small>
+   <h2 id="dashMonth">₹0</h2>
+  </div>
+
+ </div>
+
+ <div class="panel">
+
+  <h3>Recent Fee Collection</h3>
+
+  <table>
+   <thead>
+    <tr>
+     <th>Receipt</th>
+     <th>Student</th>
+     <th>Father</th>
+     <th>Class</th>
+     <th>Date</th>
+     <th>Fee Type</th>
+     <th>Amount</th>
+     <th></th>
+    </tr>
+   </thead>
+   <tbody id="recentPayments"></tbody>
+  </table>
+
+ </div>
+
+</section>
+
+<!-- STUDENTS -->
+<section id="students" class="page">
+
+ <div class="topbar">
+  <h2>Student Management</h2>
+  <button class="btn green" onclick="clearStudentForm()">+ New Student</button>
+ </div>
+
+ <div class="panel">
+
+  <h3>Add / Edit Student</h3>
+
+  <input type="hidden" id="editStudentID">
+
+  <div class="grid">
+
+   <!-- ROW 1 -->
+
+   <input id="studentName"
+          placeholder="Student Name *">
+
+   <input id="fatherName"
+          placeholder="Father Name *">
+
+   <input id="motherName"
+          placeholder="Mother Name">
+
+
+   <!-- ROW 2 -->
+
+   <input id="rollNumber"
+          placeholder="Roll Number *">
+
+   <input id="admissionNumber"
+          placeholder="Admission / SR Number">
+
+   <input id="dob"
+          type="text"
+          placeholder="Date of Birth (DOB)"
+          onfocus="this.type='date'"
+          onblur="if(!this.value)this.type='text'">
+
+
+   <!-- ROW 3 -->
+
+   <select id="studentClass">
+    <option value="">Select Class *</option>
+   </select>
+
+   <select id="studentSection">
+    <option value="">Select Section *</option>
+   </select>
+
+   <input id="studentPhone"
+          placeholder="Phone Number">
+
+
+   <!-- ROW 4 -->
+
+   <input id="admissionDate"
+          type="text"
+          placeholder="Admission Date"
+          onfocus="this.type='date'"
+          onblur="if(!this.value)this.type='text'">
+
+   <input id="transportRoute"
+          placeholder="Transport Route">
+
+  </div>
+
+
+  <!-- FEE CONCESSION -->
+
+  <div class="section-title">
+   Student-wise Fixed Fee Concession
+  </div>
+
+  <br>
+
+  <div class="grid">
+
+   <input id="studentConcession"
+          type="number"
+          value="0"
+          min="0"
+          placeholder="Fixed Concession Amount ₹">
+
+   <select id="concessionReason">
+
+    <option value="">
+     No Concession
+    </option>
+
+    <option value="Sibling Concession">
+     Sibling Concession
+    </option>
+
+    <option value="School Side Concession">
+     School Side Concession
+    </option>
+
+    <option value="Scholarship">
+     Scholarship
+    </option>
+
+    <option value="Staff Child Concession">
+     Staff Child Concession
+    </option>
+
+    <option value="Financial Assistance">
+     Financial Assistance
+    </option>
+
+    <option value="Merit Concession">
+     Merit Concession
+    </option>
+
+    <option value="Special Concession">
+     Special Concession
+    </option>
+
+    <option value="Other">
+     Other
+    </option>
+
+   </select>
+
+   <input id="concessionRemarks"
+          placeholder="Concession Remarks / Details">
+
+  </div>
+
+  <br>
+
+
+  <!-- BUTTONS -->
+
+  <div class="actions">
+
+   <button class="btn"
+           onclick="saveStudent()">
+    Save Student
+   </button>
+
+   <button class="btn gray"
+           onclick="clearStudentForm()">
+    Clear
+   </button>
+
+  </div>
+
+ </div>
+
+
+ <!-- SEARCH STUDENT -->
+
+ <div class="panel">
+
+  <h3>Search Student</h3>
+
+  <input id="studentSearch"
+         placeholder="Search by Student Name / Father Name / Roll No / Admission No"
+         oninput="renderStudentSearch()">
+
+  <div id="studentSearchResults"></div>
+
+ </div>
+
+</section>
+<!-- STUDENT PROFILE -->
+<section id="studentProfile" class="page">
+
+ <div class="topbar">
+
+  <button class="btn gray" onclick="showPage('students')">← Back</button>
+
+  <div class="actions">
+   <button class="btn purple" onclick="printStudentComplete()">Complete PDF</button>
+   <button class="btn green" onclick="exportStudentCSV()">Excel / CSV</button>
+  </div>
+
+ </div>
+
+ <div class="panel">
+
+  <div class="student-header">
+
+   <div>
+    <h2 id="profileName"></h2>
+    <p id="profileLine"></p>
+   </div>
+
+   <div class="student-id" id="profileID"></div>
+
+  </div>
+
+  <div class="student-fee-summary">
+
+   <div>
+    <small>Gross Fees</small>
+    <strong id="studentGrossFee">₹0</strong>
+   </div>
+
+   <div class="concession">
+    <small>Concession</small>
+    <strong id="studentConcessionFee">₹0</strong>
+   </div>
+
+   <div>
+    <small>Net Payable</small>
+    <strong id="studentTotalFee">₹0</strong>
+   </div>
+
+   <div class="paid">
+    <small>Fees Submitted</small>
+    <strong id="studentPaid">₹0</strong>
+   </div>
+
+   <div class="due">
+    <small>Remaining Due</small>
+    <strong id="studentDue">₹0</strong>
+   </div>
+
+  </div>
+
+  <div id="studentConcessionInfo"></div>
+
+  <div class="tabs">
+
+   <button class="tab active"
+    onclick="profileTab('profileOverview',this)">
+    Profile
+   </button>
+
+   <button class="tab"
+    onclick="profileTab('profileFees',this)">
+    Fees
+   </button>
+
+   <button class="tab"
+    onclick="profileTab('profileAttendance',this)">
+    Attendance
+   </button>
+
+   <button class="tab"
+    onclick="profileTab('profileResult',this)">
+    Result
+   </button>
+
+  </div>
+
+  <div id="profileOverview" class="ptab active"></div>
+
+  <div id="profileFees" class="ptab">
+
+   <div class="actions">
+    <button class="btn purple" onclick="printFeeStatement()">
+     Fee Statement PDF
+    </button>
+   </div>
+
+   <div id="studentFeeBreakup"></div>
+   <div id="studentPayments"></div>
+
+  </div>
+
+  <div id="profileAttendance" class="ptab">
+
+   <div class="actions">
+    <button class="btn purple" onclick="printAttendanceStatement()">
+     Attendance PDF
+    </button>
+   </div>
+
+   <div id="studentAttendance"></div>
+
+  </div>
+
+  <div id="profileResult" class="ptab">
+
+   <div class="actions">
+    <button class="btn purple" onclick="printReportCard()">
+     A4 Result PDF
+    </button>
+   </div>
+
+   <div id="studentResultPreview"></div>
+
+  </div>
+
+ </div>
+
+</section>
+
+<!-- FEE COLLECTION -->
+<section id="feeCollection" class="page">
+
+ <div class="topbar">
+  <h2>Fee Collection</h2>
+ </div>
+
+ <div class="panel">
+
+  <h3>Select Student</h3>
+
+  <div class="fee-search-row">
+
+   <div>
+    <label for="paymentStudentSearch"><b>Search Student</b></label>
+    <input id="paymentStudentSearch"
+           type="search"
+           placeholder="Search by name, father, roll, admission no. or student ID"
+           oninput="filterPaymentStudents()">
+   </div>
+
+   <div>
+    <label for="paymentStudent"><b>Student</b></label>
+    <select id="paymentStudent"
+            onchange="renderPaymentStudentSummary()">
+    </select>
+   </div>
+
+  </div>
+
+  <div id="paymentStudentSummary"></div>
+
+ </div>
+
+ <div class="panel">
+
+  <h3>Receive Payment</h3>
+
+  <div class="grid">
+
+   <select id="paymentFeeType"></select>
+
+   <input id="paymentAmount"
+          type="number"
+          min="1"
+          placeholder="Amount">
+
+   <input id="paymentMonth"
+          type="month">
+
+   <select id="paymentMode">
+    <option>Cash</option>
+    <option>UPI</option>
+    <option>Cheque</option>
+    <option>Bank Transfer</option>
+   </select>
+
+   <input id="paymentNote"
+          placeholder="Payment Note">
+
+  </div>
+
+  <br>
+
+  <button class="btn green" onclick="collectFee()">
+   Submit Fee & Generate Receipt
+  </button>
+
+ </div>
+
+ <div class="panel">
+
+  <h3>Class-wise Fee Due Report</h3>
+
+  <div class="fee-report-toolbar">
+
+   <div>
+    <label for="classFeeReportClass"><b>Class</b></label>
+    <select id="classFeeReportClass"
+            onchange="renderClassFeeDueReport()"></select>
+   </div>
+
+   <button class="btn purple" onclick="printClassFeeDueReport()">
+    Print Selected Class
+   </button>
+
+   <button class="btn gray" onclick="printAllClassFeeDueReports()">
+    Print All Classes
+   </button>
+
+  </div>
+
+  <div id="classFeeDueReport"></div>
+
+ </div>
+
+</section>
+
+<!-- MONTHLY ATTENDANCE -->
+<section id="attendance" class="page">
+
+ <div class="topbar">
+
+  <div>
+   <h2>Monthly Attendance</h2>
+
+   <div class="muted">
+    Select Class, Section and Month.
+    Enter only Present Days.
+   </div>
+  </div>
+
+ </div>
+
+
+ <div class="panel">
+
+  <h3>Class-wise Monthly Attendance</h3>
+
+  <div class="grid">
+
+   <select id="attendanceClass"
+           onchange="loadMonthlyClassAttendance()">
+   </select>
+
+   <select id="attendanceSection"
+           onchange="loadMonthlyClassAttendance()">
+   </select>
+
+   <input id="attendanceMonth"
+          type="month"
+          onchange="loadMonthlyClassAttendance()">
+
+  </div>
+
+  <br>
+
+
+  <div id="attendanceWorkingInfo"
+       class="concession-info">
+
+   Select Class, Section and Month.
+
+  </div>
+
+  <br>
+
+
+  <div style="overflow:auto">
+
+   <table>
+
+    <thead>
+
+     <tr>
+
+      <th>Roll No.</th>
+
+      <th>Student Name</th>
+
+      <th>Father Name</th>
+
+      <th>Working Days</th>
+
+      <th>Present Days</th>
+
+      <th>Absent Days</th>
+
+      <th>Attendance %</th>
+
+     </tr>
+
+    </thead>
+
+
+    <tbody id="monthlyAttendanceList">
+
+     <tr>
+
+      <td colspan="7">
+       Select Class, Section and Month.
+      </td>
+
+     </tr>
+
+    </tbody>
+
+   </table>
+
+  </div>
+
+
+  <br>
+
+
+  <div class="actions">
+
+   <button class="btn green"
+           onclick="saveMonthlyClassAttendance()">
+
+    Save / Update Attendance
+
+   </button>
+
+  </div>
+
+ </div>
+
+
+ <!-- SESSION REPORT -->
+
+ <div class="panel">
+
+  <h3>Session Attendance Report</h3>
+
+  <p class="muted">
+   Student ke jitne months ki attendance available hai,
+   un sabka total automatically calculate hoga.
+  </p>
+
+  <div class="grid">
+
+   <select id="attendanceReportClass"
+           onchange="renderSessionAttendanceReport()">
+   </select>
+
+   <select id="attendanceReportSection"
+           onchange="renderSessionAttendanceReport()">
+   </select>
+
+  </div>
+
+  <br>
+
+  <div style="overflow:auto">
+
+   <table>
+
+    <thead>
+
+     <tr>
+      <th>Roll</th>
+      <th>Student</th>
+      <th>Working Days</th>
+      <th>Present</th>
+      <th>Absent</th>
+      <th>Attendance %</th>
+     </tr>
+
+    </thead>
+
+    <tbody id="sessionAttendanceReport">
+    </tbody>
+
+   </table>
+
+  </div>
+
+ </div>
+
+</section>
+
+<!-- RESULT ENTRY -->
+<section id="resultEntry" class="page">
+
+ <div class="topbar">
+  <h2>Result / Progress Report Entry</h2>
+ </div>
+
+ <div class="panel">
+
+  <div style="margin-bottom:15px;">
+
+ <label>
+  <b>Search Student</b>
+ </label>
+
+ <input
+  id="resultStudentSearch"
+  type="text"
+  placeholder="Search by Name / Father / Roll / Admission No / Student ID"
+  oninput="filterResultStudents()"
+  autocomplete="off"
+ >
+
+ <div class="muted" style="margin-top:5px;">
+  Type student name, father name, roll number, admission number or student ID.
+ </div>
+
+</div>
+
+<div class="grid">
+
+   <select id="resultStudent"
+           onchange="loadResultForm()">
+   </select>
+
+   <input id="workingDays"
+          type="number"
+          placeholder="Working Days">
+
+   <input id="attendanceDays"
+          type="number"
+          placeholder="Attendance">
+
+   <input id="resultRemarks"
+          placeholder="Remarks">
+
+   <input id="promotedTo"
+          placeholder="Promoted To">
+
+   <input id="nextSessionDate"
+          type="date">
+
+  </div>
+
+ </div>
+
+ <div class="panel">
+
+  <h3>Academic Performance</h3>
+
+  <div class="muted">
+   Student ki class ke according configured subjects automatically yahan aayenge.
+  </div>
+
+  <div style="overflow:auto">
+
+   <table class="exam-table">
+
+    <thead id="marksEntryHead"></thead>
+
+    <tbody id="marksEntryTable"></tbody>
+
+   </table>
+
+  </div>
+
+ </div>
+
+ <div class="panel">
+
+  <h3>Activity Performance</h3>
+
+  <div class="grid">
+
+   <input id="activityComputer"
+          placeholder="Computer Grade">
+
+   <input id="activityProject"
+          placeholder="Project Grade">
+
+   <input id="activityPhysical"
+          placeholder="Physical Grade">
+
+   <input id="activityUniform"
+          placeholder="Uniform Grade">
+
+   <input id="activityDiscipline"
+          placeholder="Discipline Grade">
+
+  </div>
+
+  <br>
+
+  <div class="actions">
+
+   <button class="btn" onclick="saveResult()">
+    Save Result
+   </button>
+
+   <button class="btn purple" onclick="previewSelectedResult()">
+    Save & A4 PDF
+   </button>
+
+  </div>
+
+ </div>
+
+</section>
+
+<!-- BACKUP -->
+<section id="backup" class="page">
+
+ <div class="topbar">
+  <h2>Backup / Reports</h2>
+ </div>
+
+ <div class="panel">
+
+  <h3>Full Database Backup</h3>
+
+  <p class="muted">
+   Is backup se complete software data restore kiya ja sakta hai.
+  </p>
+
+  <div class="actions">
+
+   <button class="btn green" onclick="databaseBackup()">
+    💾 Full Database Backup
+   </button>
+
+   <button class="btn gray" onclick="restoreFile.click()">
+    ♻ Restore Database
+   </button>
+
+   <input id="restoreFile"
+          hidden
+          type="file"
+          accept=".json"
+          onchange="restoreDatabase(event)">
+
+  </div>
+
+ </div>
+
+ <div class="panel">
+
+  <h3>Complete PDF Backup</h3>
+
+  <div class="actions">
+
+   <button class="btn purple" onclick="printAllFeeReport()">
+    All Fees PDF
+   </button>
+
+   <button class="btn purple" onclick="printAllResults()">
+    All Result Cards PDF
+   </button>
+
+   <button class="btn purple" onclick="printAllAttendance()">
+    All Attendance PDF
+   </button>
+
+   <button class="btn purple" onclick="printStudentRegister()">
+    Student Register PDF
+   </button>
+
+  </div>
+
+ </div>
+
+ <div class="panel">
+
+  <h3>Excel / CSV Backup</h3>
+
+  <div class="actions">
+
+   <button class="btn green" onclick="exportStudentsCSV()">
+    Students
+   </button>
+
+   <button class="btn green" onclick="exportFeesCSV()">
+    Fees
+   </button>
+
+   <button class="btn green" onclick="exportAttendanceCSV()">
+    Attendance
+   </button>
+
+   <button class="btn green" onclick="exportResultsCSV()">
+    Results
+   </button>
+
+  </div>
+
+ </div>
+
+</section>
+
+<!-- ADMIN -->
+<section id="admin" class="page">
+
+ <div class="topbar">
+  <h2>Admin / Setup</h2>
+ </div>
+
+ <div class="panel">
+
+  <h3>School Details</h3>
+
+  <div class="grid">
+
+   <input id="schoolName"
+          placeholder="School Name">
+
+   <input id="schoolSubtitle"
+          placeholder="Recognition Text">
+
+   <input id="schoolAddress"
+          placeholder="Address">
+
+   <input id="schoolPhone"
+          placeholder="Phone">
+
+   <input id="schoolEmail"
+          placeholder="Email">
+
+   <input id="schoolUdise"
+          placeholder="UDISE Code">
+
+   <input id="schoolSession"
+          placeholder="Session">
+
+  </div>
+
+  <br>
+
+  <button class="btn purple" onclick="saveSchoolSettings()">
+   Save School Details
+  </button>
+
+ </div>
+
+ <!-- ATTENDANCE WORKING DAYS SETUP -->
+
+<div class="panel">
+
+ <h3>Attendance Working Days Setup</h3>
+
+ <p class="muted">
+  Monthly working days yahan ek baar set karein.
+  Attendance me sirf Present Days enter karne honge.
+ </p>
+
+ <div class="grid">
+
+  <input id="attendanceSetupSession"
+         placeholder="Session"
+         readonly>
+
+  <input id="attendanceSetupMonth"
+         type="month">
+
+  <select id="attendanceSetupMode"
+          onchange="toggleAttendanceSetupClass()">
+
+   <option value="all">
+    All Classes
+   </option>
+
+   <option value="class">
+    Specific Class
+   </option>
+
+  </select>
+
+  <select id="attendanceSetupClass"
+          style="display:none">
+  </select>
+
+  <input id="attendanceSetupDays"
+         type="number"
+         min="1"
+         max="31"
+         placeholder="Working Days">
+
+ </div>
+
+ <br>
+
+ <button class="btn purple"
+         onclick="saveAttendanceWorkingDays()">
+  Save Working Days
+ </button>
+
+ <br><br>
+
+ <h4>Saved Working Days</h4>
+
+ <div style="overflow:auto">
+
+  <table>
+
+   <thead>
+    <tr>
+     <th>Session</th>
+     <th>Month</th>
+     <th>Apply To</th>
+     <th>Working Days</th>
+     <th>Action</th>
+    </tr>
+   </thead>
+
+   <tbody id="attendanceWorkingDaysList">
+
+    <tr>
+     <td colspan="5">
+      No Working Days configured.
+     </td>
+    </tr>
+
+   </tbody>
+
+  </table>
+
+ </div>
+
+</div>
+
+ <!-- FEE STRUCTURE -->
+ <div class="panel">
+
+  <h3>Class-wise Fee Structure</h3>
+
+  <div class="grid">
+
+   <select id="feeStructureClass"></select>
+
+   <select id="feeStructureType"></select>
+
+   <input id="feeStructureAmount"
+          type="number"
+          placeholder="Fee Amount">
+
+   <select id="feeFrequency">
+    <option value="monthly">Monthly</option>
+    <option value="annual">Once Per Session</option>
+   </select>
+
+  </div>
+
+  <br>
+
+  <div class="actions">
+
+   <button class="btn" onclick="addFeeStructure()">
+    Add / Update Fee
+   </button>
+
+   <button class="btn purple" onclick="printSelectedFeeStructure()">
+    A4 Fee Structure PDF
+   </button>
+
+  </div>
+
+  <table>
+
+   <thead>
+    <tr>
+     <th>Class</th>
+     <th>Fee</th>
+     <th>Amount</th>
+     <th>Frequency</th>
+     <th></th>
+    </tr>
+   </thead>
+
+   <tbody id="feeStructureList"></tbody>
+
+  </table>
+
+ </div>
+
+ <!-- CLASS SUBJECTS -->
+ <div class="panel">
+
+  <h3>Class-wise Subject Setup</h3>
+
+  <div style="max-width:350px">
+
+   <label><b>Select Class</b></label>
+
+   <select id="subjectSetupClass"
+           onchange="renderClassSubjectSetup()">
+   </select>
+
+  </div>
+
+  <br>
+
+  <div id="classSubjectCheckboxes"
+       class="subject-checkbox-grid">
+  </div>
+
+  <br>
+
+  <button class="btn purple"
+          onclick="saveClassSubjects()">
+   Save Subjects For Class
+  </button>
+
+  <p class="muted">
+   Result Entry me selected class ke sirf ye subjects show honge.
+  </p>
+
+ </div>
+
+ <!-- CLASS-WISE RESULT SETUP -->
+
+<div class="panel">
+
+ <h3>Class-wise Result Setup</h3>
+
+ <p class="muted">
+  Har class ke liye exams aur maximum marks configure karein.
+  Result Entry me teacher ko sirf obtained marks enter karne honge.
+ </p>
+
+
+ <!-- SELECT CLASS -->
+
+ <div style="max-width:350px;">
+
+  <label>
+   <b>Select Class</b>
+  </label>
+
+  <select
+   id="resultSetupClass"
+   onchange="renderResultSetup()">
+  </select>
+
+ </div>
+
+ <br>
+
+
+ <!-- EXAM SETUP -->
+
+ <div class="section-title">
+  Examination Setup
+ </div>
+
+ <br>
+
+
+ <div class="grid">
+
+
+  <!-- QUARTERLY -->
+
+  <div>
+
+   <label class="subject-check">
+
+    <input
+     type="checkbox"
+     id="enableQuarterly"
+     onchange="renderResultSetupSubjects()"
+    >
+
+    <b>Quarterly</b>
+
+   </label>
+
+   <br>
+
+   <label>
+    Default Max Marks
+   </label>
+
+   <input
+    id="defaultQuarterlyMax"
+    type="number"
+    min="0"
+    value="40"
+    oninput="applyResultDefaultMarks('quarterly')"
+   >
+
+  </div>
+
+
+  <!-- HALF YEARLY -->
+
+  <div>
+
+   <label class="subject-check">
+
+    <input
+     type="checkbox"
+     id="enableHalfYearly"
+     onchange="renderResultSetupSubjects()"
+    >
+
+    <b>Half Yearly</b>
+
+   </label>
+
+   <br>
+
+   <label>
+    Default Max Marks
+   </label>
+
+   <input
+    id="defaultHalfYearlyMax"
+    type="number"
+    min="0"
+    value="60"
+    oninput="applyResultDefaultMarks('halfYearly')"
+   >
+
+  </div>
+
+
+  <!-- ANNUAL -->
+
+  <div>
+
+   <label class="subject-check">
+
+    <input
+     type="checkbox"
+     id="enableAnnual"
+     onchange="renderResultSetupSubjects()"
+    >
+
+    <b>Annual</b>
+
+   </label>
+
+   <br>
+
+   <label>
+    Default Max Marks
+   </label>
+
+   <input
+    id="defaultAnnualMax"
+    type="number"
+    min="0"
+    value="100"
+    oninput="applyResultDefaultMarks('annual')"
+   >
+
+  </div>
+
+
+ </div>
+
+
+ <br>
+
+
+ <!-- SUBJECT MARKS -->
+
+ <div class="section-title">
+  Subject-wise Maximum Marks
+ </div>
+
+ <p class="muted">
+  Upar diye gaye default marks automatically apply honge.
+  Kisi subject ke maximum marks alag hain to neeche change kar sakte hain.
+ </p>
+
+
+ <div style="overflow:auto;">
+
+  <table>
+
+   <thead id="resultSetupTableHead">
+   </thead>
+
+   <tbody id="resultSetupSubjects">
+   </tbody>
+
+  </table>
+
+ </div>
+
+
+ <br>
+
+
+ <button
+  type="button"
+  class="btn purple"
+  onclick="saveResultSetup()">
+
+  Save Result Setup
+
+ </button>
+
+
+</div>
+
+ <!-- MASTER DATA -->
+<div class="panel">
+
+ <h3>Master Data</h3>
+
+ <div class="grid">
+
+  <!-- CLASS -->
+  <div>
+   <input id="newClass"
+          placeholder="New Class">
+
+   <br><br>
+
+   <button class="btn small"
+           onclick="addMaster('classes','newClass')">
+    Add Class
+   </button>
+
+   <div id="masterClassList"
+        style="margin-top:15px;">
+   </div>
+  </div>
+
+
+  <!-- SECTION -->
+  <div>
+   <input id="newSection"
+          placeholder="New Section">
+
+   <br><br>
+
+   <button class="btn small"
+           onclick="addMaster('sections','newSection')">
+    Add Section
+   </button>
+
+   <div id="masterSectionList"
+        style="margin-top:15px;">
+   </div>
+  </div>
+
+
+  <!-- SUBJECT -->
+  <div>
+   <input id="newSubject"
+          placeholder="New Subject">
+
+   <br><br>
+
+   <button class="btn small"
+           onclick="addMaster('subjects','newSubject')">
+    Add Subject
+   </button>
+
+   <div id="masterSubjectList"
+        style="margin-top:15px;">
+   </div>
+  </div>
+
+
+  <!-- FEE TYPE -->
+  <div>
+   <input id="newFeeType"
+          placeholder="New Fee Type">
+
+   <br><br>
+
+   <button class="btn small"
+           onclick="addMaster('feeTypes','newFeeType')">
+    Add Fee Type
+   </button>
+
+   <div id="masterFeeTypeList"
+        style="margin-top:15px;">
+   </div>
+  </div>
+
+ </div>
+
+</div>
+
+ <!-- LICENSE INFORMATION -->
+ <div class="panel">
+  <h3>License Information</h3>
+  <div class="grid">
+   <div><b>Licensed To</b><div id="licenseLicensedTo" class="muted">-</div></div>
+   <div><b>License ID</b><div id="licenseIdDisplay" class="muted">-</div></div>
+   <div><b>Machine Code</b><div id="licenseMachineCode" class="muted" style="word-break:break-all;">-</div></div>
+   <div><b>License Type</b><div id="licenseTypeDisplay" class="muted">-</div></div>
+   <div><b>Expiry Date</b><div id="licenseExpiryDisplay" class="muted">-</div></div>
+   <div><b>License Status</b><div id="licenseStatusDisplay" style="font-weight:700;">Checking...</div></div>
+  </div>
+  <br>
+  <button class="btn red" onclick="deactivateCurrentLicense()">Deactivate License</button>
+ </div>
+ <!-- SECURITY -->
+ <div class="panel">
+
+  <h3>Security</h3>
+
+  <div class="grid">
+
+   <input id="oldPassword"
+          type="password"
+          placeholder="Current Password">
+
+   <input id="newPassword"
+          type="password"
+          placeholder="New Password">
+
+  </div>
+
+  <br>
+
+  <button class="btn red" onclick="changePassword()">
+   Change Admin Password
+  </button>
+
+ </div>
+
+</section>
+
+</div>
+</div>
+
+<!-- PRINT AREA -->
+<div id="printArea" class="print-document"></div>
+
+<script>
+
+/* =====================================================
+   DATABASE
+===================================================== */
+
+const DEFAULT_DB={
+
+ school:{
+  name:"ASCENT PUBLIC SCHOOL",
+  subtitle:"A Govt. Recognized Institution | English Medium Co-Educational Academy",
+  address:"SURYA ENCLAVE, MUZAFFARNAGAR (U.P.)",
+  phone:"8218551646",
+  email:"",
+  udise:"09020103236",
+  session:"2026-27"
+ },
+
+ security:{
+  username:"admin",
+  password:"admin123"
+ },
+
+ classes:[
+ "Nursery",
+ "LKG",
+ "UKG",
+ "Class I",
+ "Class II",
+ "Class III",
+ "Class IV",
+ "Class V",
+ "Class VI",
+ "Class VII",
+ "Class VIII",
+ "Class IX",
+ "Class X"
+],
+
+sections:[
+ "A",
+ "B",
+ "C"
+],
+
+ subjects:[
+  "Hindi",
+  "English",
+  "Maths",
+  "EVS/S.St.",
+  "Science",
+  "Sanskrit",
+  "G.K.",
+  "Computer",
+  "Drawing"
+ ],
+
+ classSubjects:{},
+
+ resultSetup:{},
+
+ feeTypes:[
+  "Monthly Fee",
+  "Annual Fee",
+  "Computer Fee",
+  "Exam Fee",
+  "Transport Fee",
+  "Additional Fee"
+ ],
+
+ students:[],
+feeStructures:[],
+payments:[],
+attendance:[],
+
+attendanceWorkingDays:[],
+
+results:[]
+};
+
+let db;
+
+try{
+
+ db=
+ JSON.parse(localStorage.getItem("SCHOOL_ERP_V5"))
+ ||
+ JSON.parse(JSON.stringify(DEFAULT_DB));
+
+}catch{
+
+ db=JSON.parse(JSON.stringify(DEFAULT_DB));
+
+}
+
+/* MIGRATION / SAFETY */
+
+if(!db.classSubjects) db.classSubjects={};
+
+if(!db.resultSetup) db.resultSetup={};
+
+if(!db.students) db.students=[];
+if(!db.feeStructures) db.feeStructures=[];
+if(!db.payments) db.payments=[];
+if(!db.attendance) db.attendance=[];
+
+if(!db.attendanceWorkingDays)
+ db.attendanceWorkingDays=[];
+
+if(!db.results) db.results=[];
+
+/* =====================================================
+   LOAD APP SETTINGS FROM SQLITE
+===================================================== */
+
+async function loadSettingsFromSQLite(){
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.loadSetting
+  ){
+
+   console.warn(
+    "SQLite Settings API not available."
+   );
+
+   return;
+  }
+
+
+  const [
+   school,
+   security
+  ] = await Promise.all([
+
+   window.schoolAPI.loadSetting(
+    "school"
+   ),
+
+   window.schoolAPI.loadSetting(
+    "security"
+   )
+
+  ]);
+
+
+  /* SCHOOL */
+
+  if(
+   school &&
+   typeof school === "object"
+  ){
+
+   db.school = school;
+
+  }
+
+
+  /* SECURITY */
+
+  if(
+   security &&
+   typeof security === "object"
+  ){
+
+   db.security = security;
+
+  }
+
+
+  console.log(
+   "App settings loaded from SQLite."
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "SQLite Settings Load Error:",
+   error
+  );
+
+ }
+
+}
+
+// Restore default classes if missing or empty
+if(!Array.isArray(db.classes) || db.classes.length===0){
+
+ db.classes=[
+  "Nursery",
+  "LKG",
+  "UKG",
+  "Class I",
+  "Class II",
+  "Class III",
+  "Class IV",
+  "Class V",
+  "Class VI",
+  "Class VII",
+  "Class VIII",
+  "Class IX",
+  "Class X"
+ ];
+
+}
+
+// Restore default sections if missing or empty
+if(!Array.isArray(db.sections) || db.sections.length===0){
+
+ db.sections=[
+  "A",
+  "B",
+  "C"
+ ];
+
+}
+
+let currentStudentID=null;
+
+const $=id=>document.getElementById(id);
+
+function saveDB(){
+
+  /*
+   Temporary local backup.
+   Final migration complete hone tak
+   localStorage ko remove nahi karenge.
+  */
+
+  localStorage.setItem(
+    "SCHOOL_ERP_V5",
+    JSON.stringify(db)
+  );
+
+
+  /*
+   SQLite App Settings
+
+   IMPORTANT:
+   classSubjects aur resultSetup yahan
+   save nahi honge.
+
+   Unke dedicated SQLite systems hain.
+  */
+
+  if(
+    window.schoolAPI &&
+    window.schoolAPI.saveSetting
+  ){
+
+    Promise.all([
+
+      /* SCHOOL */
+
+      window.schoolAPI.saveSetting(
+        "school",
+        db.school
+      ),
+
+
+      /* SECURITY */
+
+      window.schoolAPI.saveSetting(
+        "security",
+        db.security
+      ),
+
+
+
+    ]).catch(error=>{
+
+      console.error(
+        "SQLite Settings Save Error:",
+        error
+      );
+
+    });
+
+  }
+
+
+  renderAll();
+
+}
+
+
+/* =====================================================
+ LOGIN
+===================================================== */
+
+function doLogin(){
+
+ if(
+  $("loginUser").value===db.security.username &&
+  $("loginPassword").value===db.security.password
+ ){
+
+  $("login").classList.add("hidden");
+  $("application").classList.remove("hidden");
+
+ }else{
+
+  alert("Invalid username or password.");
+
+ }
+}
+
+function logout(){
+
+ $("application").classList.add("hidden");
+
+ $("login").classList.remove("hidden");
+
+ $("loginPassword").value="";
+}
+
+
+/* =====================================================
+ NAVIGATION
+===================================================== */
+
+function showPage(id,button){
+
+ document
+ .querySelectorAll(".page")
+ .forEach(x=>x.classList.remove("active"));
+
+ $(id).classList.add("active");
+
+ if(id === "admin"){
+  renderLicenseInformation();
+ }
+
+ if(button){
+
+  document
+  .querySelectorAll(".nav")
+  .forEach(x=>x.classList.remove("active"));
+
+  button.classList.add("active");
+
+ }
+}
+
+function profileTab(id,button){
+
+ document
+ .querySelectorAll(".ptab")
+ .forEach(x=>x.classList.remove("active"));
+
+ $(id).classList.add("active");
+
+ document
+ .querySelectorAll(".tab")
+ .forEach(x=>x.classList.remove("active"));
+
+ button.classList.add("active");
+}
+
+
+/* =====================================================
+ STUDENTS
+===================================================== */
+
+function generateStudentID(){
+
+ let max=0;
+
+ db.students.forEach(s=>{
+
+  let n=
+  Number(
+   String(s.id||"").replace(/\D/g,"")
+  );
+
+  if(n>max)max=n;
+
+ });
+
+ return "STU-"+String(max+1).padStart(6,"0");
+}
+
+async function loadStudentsFromDatabase(){
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.getStudents
+  ){
+
+   console.error(
+    "SQLite Student API not available."
+   );
+
+   return;
+  }
+
+
+  let students=
+  await window.schoolAPI.getStudents();
+
+
+  db.students=
+  Array.isArray(students)
+  ? students
+  : [];
+
+
+  renderAll();
+
+
+ }catch(error){
+
+  console.error(
+   "Student Database Load Error:",
+   error
+  );
+
+ }
+
+}
+
+/* =====================================================
+   LOAD CLASS SUBJECTS FROM SQLITE
+===================================================== */
+
+async function loadClassSubjectsFromDatabase(){
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.getClassSubjects
+  ){
+
+   console.error(
+    "SQLite Class Subjects API not available."
+   );
+
+   return;
+
+  }
+
+
+  let classSubjects =
+   await window.schoolAPI
+   .getClassSubjects();
+
+
+  if(
+   classSubjects &&
+   typeof classSubjects === "object"
+  ){
+
+   db.classSubjects =
+    classSubjects;
+
+  }else{
+
+   db.classSubjects = {};
+
+  }
+
+
+  console.log(
+   "Class subjects loaded from SQLite."
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "Class Subjects Database Load Error:",
+   error
+  );
+
+ }
+
+}
+
+/* =====================================================
+   LOAD MASTER DATA FROM SQLITE
+===================================================== */
+
+async function loadMasterDataFromDatabase(){
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.getMasterData
+  ){
+
+   console.error(
+    "SQLite Master Data API not available."
+   );
+
+   return;
+
+  }
+
+
+  const master =
+   await window.schoolAPI.getMasterData();
+
+
+  if(
+   !master ||
+   typeof master !== "object"
+  ){
+
+   console.error(
+    "Invalid Master Data received from SQLite."
+   );
+
+   return;
+
+  }
+
+
+  if(Array.isArray(master.classes)){
+   db.classes = master.classes;
+  }
+
+
+  if(Array.isArray(master.sections)){
+   db.sections = master.sections;
+  }
+
+
+  if(Array.isArray(master.subjects)){
+   db.subjects = master.subjects;
+  }
+
+
+  if(Array.isArray(master.feeTypes)){
+   db.feeTypes = master.feeTypes;
+  }
+
+
+  console.log(
+   "Master data loaded from SQLite."
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "Master Data Load Error:",
+   error
+  );
+
+ }
+
+}
+
+/* =====================================================
+   LOAD RESULT SETUPS FROM SQLITE
+===================================================== */
+
+async function loadResultSetupsFromDatabase(){
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.getResultSetups
+  ){
+
+   console.error(
+    "SQLite Result Setup API not available."
+   );
+
+   return;
+
+  }
+
+
+  let resultSetups =
+   await window.schoolAPI
+   .getResultSetups();
+
+
+  if(
+   resultSetups &&
+   typeof resultSetups === "object"
+  ){
+
+   db.resultSetup =
+    resultSetups;
+
+  }else{
+
+   db.resultSetup = {};
+
+  }
+
+
+  console.log(
+   "Result setups loaded from SQLite."
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "Result Setup Database Load Error:",
+   error
+  );
+
+ }
+
+}
+
+/* =====================================================
+   LOAD ATTENDANCE WORKING DAYS FROM SQLITE
+===================================================== */
+
+async function loadAttendanceWorkingDaysFromDatabase(){
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.getAttendanceWorkingDays
+  ){
+   console.error("SQLite Attendance Working Days API not available.");
+   return;
+  }
+
+  const rows = await window.schoolAPI.getAttendanceWorkingDays();
+  db.attendanceWorkingDays = Array.isArray(rows) ? rows : [];
+
+  console.log(
+   "Attendance working days loaded from SQLite:",
+   db.attendanceWorkingDays.length
+  );
+
+ }catch(error){
+  console.error("Attendance Working Days Load Error:", error);
+ }
+
+}
+
+/* =====================================================
+   LOAD STUDENT ATTENDANCE FROM SQLITE
+===================================================== */
+
+async function loadStudentAttendanceFromDatabase(){
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.getStudentAttendance
+  ){
+   console.error("SQLite Student Attendance API not available.");
+   return;
+  }
+
+  const rows = await window.schoolAPI.getStudentAttendance();
+  db.attendance = Array.isArray(rows) ? rows : [];
+
+  console.log(
+   "Student attendance loaded from SQLite:",
+   db.attendance.length
+  );
+
+ }catch(error){
+  console.error("Student Attendance Load Error:", error);
+ }
+
+}
+
+/* =====================================================
+   LOAD STUDENT RESULTS FROM SQLITE
+===================================================== */
+
+async function loadStudentResultsFromDatabase(){
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.getStudentResults
+  ){
+   console.error("SQLite Student Result API not available.");
+   return;
+  }
+
+  const rows = await window.schoolAPI.getStudentResults();
+  db.results = Array.isArray(rows) ? rows : [];
+
+  console.log(
+   "Student results loaded from SQLite:",
+   db.results.length
+  );
+
+ }catch(error){
+  console.error("Student Result Load Error:", error);
+ }
+
+}
+
+/* =====================================================
+   LOAD FEE STRUCTURES FROM SQLITE
+===================================================== */
+
+async function loadFeeStructuresFromDatabase(){
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.getFeeStructures
+  ){
+
+   console.error(
+    "SQLite Fee Structure API not available."
+   );
+
+   return;
+  }
+
+
+  let feeStructures =
+   await window.schoolAPI.getFeeStructures();
+
+
+  db.feeStructures =
+   Array.isArray(feeStructures)
+   ? feeStructures
+   : [];
+
+
+  console.log(
+   "Fee structures loaded from SQLite:",
+   db.feeStructures.length
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "Fee Structure Database Load Error:",
+   error
+  );
+
+ }
+
+}
+
+/* =====================================================
+   LOAD PAYMENTS FROM SQLITE
+===================================================== */
+
+async function loadPaymentsFromDatabase(){
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.getPayments
+  ){
+
+   console.error(
+    "SQLite Payment API not available."
+   );
+
+   return;
+  }
+
+
+  let payments =
+   await window.schoolAPI.getPayments();
+
+
+  db.payments =
+   Array.isArray(payments)
+   ? payments.map(p => ({
+
+      ...p,
+
+      /*
+       Existing software compatibility:
+       dateISO ko Indian display date me convert karo.
+      */
+
+      date:
+       p.dateISO
+       ? new Date(
+          p.dateISO + "T00:00:00"
+         ).toLocaleDateString("en-IN")
+       : ""
+
+     }))
+   : [];
+
+
+  console.log(
+   "Payments loaded from SQLite:",
+   db.payments.length
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "Payment Database Load Error:",
+   error
+  );
+
+ }
+
+}
+
+async function saveStudent(){
+
+ let name=$("studentName").value.trim();
+ let father=$("fatherName").value.trim();
+ let roll=$("rollNumber").value.trim();
+
+ if(!name || !father || !roll){
+
+  alert(
+   "Student Name, Father Name and Roll Number are required."
+  );
+
+  return;
+ }
+
+ let editID=$("editStudentID").value;
+
+ let existing=
+ editID
+ ? db.students.find(s=>s.id===editID)
+ : null;
+
+
+ /* DUPLICATE CHECK */
+
+ let duplicate=db.students.find(s=>
+
+  s.id!==editID &&
+
+  String(s.name||"").toLowerCase()===
+  name.toLowerCase() &&
+
+  String(s.father||"").toLowerCase()===
+  father.toLowerCase() &&
+
+  String(s.roll||"").toLowerCase()===
+  roll.toLowerCase() &&
+
+  s.className===$("studentClass").value
+
+ );
+
+ if(duplicate){
+
+  alert(
+   "Same Student Name + Father Name + Roll Number already exists."
+  );
+
+  return;
+ }
+
+
+ let concession=
+ Math.max(
+  0,
+  Number($("studentConcession").value)||0
+ );
+
+
+ let student={
+
+  id:
+  existing
+  ? existing.id
+  : generateStudentID(),
+
+  name:name,
+
+  father:father,
+
+  mother:
+  $("motherName").value.trim(),
+
+  roll:roll,
+
+  admission:
+  $("admissionNumber").value.trim(),
+
+  dob:
+  $("dob").value,
+
+  className:
+  $("studentClass").value,
+
+  section:
+  $("studentSection").value,
+
+  phone:
+  $("studentPhone").value.trim(),
+
+  admissionDate:
+  $("admissionDate").value,
+
+  transportRoute:
+  $("transportRoute").value.trim(),
+
+  concession:concession,
+
+  concessionReason:
+  concession>0
+  ? $("concessionReason").value
+  : "",
+
+  concessionRemarks:
+  concession>0
+  ? $("concessionRemarks").value.trim()
+  : ""
+
+ };
+
+
+ try{
+
+  /* SAVE TO SQLITE */
+
+  let result=
+  await window.schoolAPI.saveStudent(student);
+
+
+  if(!result || !result.success){
+
+   alert(
+    "Student could not be saved.\n\n"+
+    (result?.message || "Unknown database error")
+   );
+
+   return;
+  }
+
+
+  /* RELOAD STUDENTS FROM SQLITE */
+
+  db.students=
+  await window.schoolAPI.getStudents();
+
+
+  clearStudentForm();
+
+  renderAll();
+
+
+  alert(
+   existing
+   ? "Student updated successfully."
+   : "Student saved successfully."
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "Student Save Error:",
+   error
+  );
+
+  alert(
+   "Database Error:\n"+
+   error.message
+  );
+
+ }
+
+}
+
+function clearStudentForm(){
+
+ [
+  "editStudentID",
+  "studentName",
+  "fatherName",
+  "motherName",
+  "rollNumber",
+  "admissionNumber",
+  "dob",
+  "studentPhone",
+  "admissionDate",
+  "transportRoute",
+  "concessionRemarks"
+ ].forEach(id=>{
+
+  if($(id)){
+   $(id).value="";
+  }
+
+ });
+
+ if($("studentConcession"))
+  $("studentConcession").value=0;
+
+ if($("concessionReason"))
+  $("concessionReason").value="";
+
+}
+
+
+
+
+function renderStudentSearch(){
+
+ let searchBox = $("studentSearch");
+
+ if(!searchBox){
+  return;
+ }
+
+ let q =
+ (searchBox.value || "")
+ .toLowerCase()
+ .trim();
+
+ let students =
+ (db.students || []).filter(s =>
+
+  !q ||
+
+  String(s.name || "")
+   .toLowerCase()
+   .includes(q) ||
+
+  String(s.father || "")
+   .toLowerCase()
+   .includes(q) ||
+
+  String(s.roll || "")
+   .toLowerCase()
+   .includes(q) ||
+
+  String(s.admission || "")
+   .toLowerCase()
+   .includes(q)
+
+ );
+
+ let results = $("studentSearchResults");
+
+ if(!results){
+  return;
+ }
+
+ results.innerHTML =
+ students.map(s => `
+
+ <div class="search-result">
+
+  <div>
+
+   <b>${escapeHTML(s.name || "")}</b>
+
+   <br>
+
+   <span class="muted">
+
+    Father:
+    ${escapeHTML(s.father || "")}
+
+    | Roll:
+    ${escapeHTML(s.roll || "")}
+
+    | ${escapeHTML(s.className || "")}
+    -${escapeHTML(s.section || "")}
+
+    | ${escapeHTML(s.id || "")}
+
+   </span>
+
+  </div>
+
+  <div class="actions">
+
+   <button
+    class="btn small"
+    onclick="openStudent('${s.id}')">
+    Open
+   </button>
+
+   <button
+    class="btn gray small"
+    onclick="editStudent('${s.id}')">
+    Edit
+   </button>
+
+   <button
+    class="btn red small"
+    onclick="deleteStudent('${s.id}')">
+    Delete
+   </button>
+
+  </div>
+
+ </div>
+
+ `).join("");
+
+}
+
+/* =====================================================
+ FEE CALCULATIONS
+===================================================== */
+
+function classFeeRows(className){
+
+ return db.feeStructures.filter(
+  x=>x.className===className
+ );
+}
+
+function studentFeeCalculation(student){
+
+ if(!student){
+
+  return{
+   gross:0,
+   concession:0,
+   total:0,
+   paid:0,
+   due:0
+  };
+
+ }
+
+ let structure=
+ classFeeRows(student.className);
+
+ let gross=0;
+
+ structure.forEach(f=>{
+
+  let amount=
+  Number(f.amount)||0;
+
+  if(f.frequency==="monthly"){
+
+   gross+=amount*12;
+
+  }else{
+
+   gross+=amount;
+
+  }
+
+ });
+
+ let concession=
+ Math.max(
+  0,
+  Number(student.concession)||0
+ );
+
+ concession=
+ Math.min(
+  concession,
+  gross
+ );
+
+ let total=
+ Math.max(
+  0,
+  gross-concession
+ );
+
+ let paid=
+ db.payments
+ .filter(p=>p.studentId===student.id)
+ .reduce(
+  (sum,p)=>
+  sum+Number(p.amount||0),
+  0
+ );
+
+ let due=
+ Math.max(
+  0,
+  total-paid
+ );
+
+ return{
+  gross,
+  concession,
+  total,
+  paid,
+  due
+ };
+}
+
+function schoolFeeCalculation(){
+
+ let gross=0;
+ let concession=0;
+ let total=0;
+
+ db.students.forEach(s=>{
+
+  let f=
+  studentFeeCalculation(s);
+
+  gross+=f.gross;
+  concession+=f.concession;
+  total+=f.total;
+
+ });
+
+ let paid=
+ db.payments.reduce(
+  (a,b)=>
+  a+Number(b.amount||0),
+  0
+ );
+
+ return{
+  gross,
+  concession,
+  total,
+  paid,
+  due:Math.max(0,total-paid)
+ };
+}
+
+
+/* =====================================================
+ STUDENT PROFILE
+===================================================== */
+
+function renderStudentProfile(){
+
+ let s=currentStudent();
+
+ if(!s)return;
+
+ let fee=
+ studentFeeCalculation(s);
+
+ $("profileName").innerText=s.name;
+
+ $("profileLine").innerText=
+ `Father: ${s.father} | Roll: ${s.roll} | ${s.className}-${s.section}`;
+
+ $("profileID").innerText=s.id;
+
+ $("studentGrossFee").innerText=
+ money(fee.gross);
+
+ $("studentConcessionFee").innerText=
+ money(fee.concession);
+
+ $("studentTotalFee").innerText=
+ money(fee.total);
+
+ $("studentPaid").innerText=
+ money(fee.paid);
+
+ $("studentDue").innerText=
+ money(fee.due);
+
+ $("studentConcessionInfo").innerHTML=
+ fee.concession>0
+ ? `
+ <div class="concession-info">
+
+  <b>Fee Concession:</b>
+  ${money(fee.concession)}
+
+  &nbsp; | &nbsp;
+
+  <b>Reason:</b>
+  ${escapeHTML(
+   s.concessionReason||
+   "Not Specified"
+  )}
+
+  ${
+   s.concessionRemarks
+   ? `
+   <br>
+   <b>Remarks:</b>
+   ${escapeHTML(s.concessionRemarks)}
+   `
+   : ""
+  }
+
+ </div>
+ `
+ : "";
+
+ $("profileOverview").innerHTML=`
+
+ <table>
+
+  <tr>
+   <th>Student ID</th>
+   <td>${escapeHTML(s.id)}</td>
+
+   <th>Admission / SR No.</th>
+   <td>${escapeHTML(s.admission||"-")}</td>
+  </tr>
+
+  <tr>
+   <th>Student Name</th>
+   <td>${escapeHTML(s.name)}</td>
+
+   <th>Father Name</th>
+   <td>${escapeHTML(s.father)}</td>
+  </tr>
+
+  <tr>
+   <th>Mother Name</th>
+   <td>${escapeHTML(s.mother||"-")}</td>
+
+   <th>Date of Birth</th>
+   <td>${escapeHTML(s.dob||"-")}</td>
+  </tr>
+
+  <tr>
+   <th>Class</th>
+   <td>${escapeHTML(s.className)}</td>
+
+   <th>Section / Roll</th>
+   <td>
+    ${escapeHTML(s.section)}
+    /
+    ${escapeHTML(s.roll)}
+   </td>
+  </tr>
+
+  <tr>
+   <th>Phone</th>
+   <td>${escapeHTML(s.phone||"-")}</td>
+
+   <th>Admission Date</th>
+   <td>${escapeHTML(s.admissionDate||"-")}</td>
+  </tr>
+
+  <tr>
+   <th>Transport Route</th>
+   <td>${escapeHTML(s.transportRoute||"-")}</td>
+
+   <th>Concession</th>
+   <td>${money(fee.concession)}</td>
+  </tr>
+
+ </table>
+
+ `;
+
+ renderStudentFees(s);
+ renderStudentAttendance(s);
+ renderStudentResult(s);
+}
+
+function renderStudentFees(s){
+
+ let rows=
+ classFeeRows(s.className);
+
+ let payments=
+ db.payments.filter(
+  p=>p.studentId===s.id
+ );
+
+ let paidByType={};
+
+ payments.forEach(p=>{
+
+  paidByType[p.feeType]=
+  (paidByType[p.feeType]||0)
+  +
+  Number(p.amount||0);
+
+ });
+
+ let structureRows=
+ rows.map(f=>{
+
+  let total=
+  f.frequency==="monthly"
+  ? Number(f.amount)*12
+  : Number(f.amount);
+
+  let paid=
+  paidByType[f.type]||0;
+
+  return[
+   f.type,
+   f.frequency==="monthly"
+   ? money(f.amount)+" × 12"
+   : money(f.amount),
+   money(total),
+   money(paid),
+   money(
+    Math.max(0,total-paid)
+   )
+  ];
+
+ });
+
+ let calc=
+ studentFeeCalculation(s);
+
+ $("studentFeeBreakup").innerHTML=`
+
+ <h3>Fee Structure</h3>
+
+ ${
+  htmlTable(
+   [
+    "Fee Type",
+    "Rate",
+    "Total",
+    "Paid",
+    "Balance"
+   ],
+   structureRows
+  )
+ }
+
+ <h3>Final Fee Summary</h3>
+
+ ${
+  htmlTable(
+   [
+    "Gross Fee",
+    "Concession",
+    "Net Payable",
+    "Paid",
+    "Remaining Due"
+   ],
+   [[
+    money(calc.gross),
+    money(calc.concession),
+    money(calc.total),
+    money(calc.paid),
+    money(calc.due)
+   ]]
+  )
+ }
+
+ `;
+
+ $("studentPayments").innerHTML=`
+
+ <h3>Payment History</h3>
+
+ ${
+  htmlTable(
+   [
+    "Receipt",
+    "Date",
+    "Fee Type",
+    "Month",
+    "Amount",
+    "Mode",
+    "Action"
+   ],
+
+   payments.map(p=>[
+    p.receipt,
+    p.date,
+    p.feeType,
+    p.month||"-",
+    money(p.amount),
+    p.mode,
+    `
+    <button
+     class="btn small"
+     onclick="printReceipt('${p.id}')">
+     Receipt
+    </button>
+    `
+   ])
+  )
+ }
+
+ `;
+}
+
+function renderStudentAttendance(s){
+
+ let records=
+ db.attendance.filter(
+  a=>a.studentId===s.id
+ );
+
+ let present=
+ records.filter(
+  a=>a.status==="Present"
+ ).length;
+
+ let absent=
+ records.filter(
+  a=>a.status==="Absent"
+ ).length;
+
+ $("studentAttendance").innerHTML=`
+
+ <div class="cards">
+
+  <div class="card">
+   <small>Total Entries</small>
+   <h2>${records.length}</h2>
+  </div>
+
+  <div class="card paid">
+   <small>Present</small>
+   <h2>${present}</h2>
+  </div>
+
+  <div class="card due">
+   <small>Absent</small>
+   <h2>${absent}</h2>
+  </div>
+
+ </div>
+
+ ${
+  htmlTable(
+   ["Date","Status"],
+   records.map(a=>[
+    a.date,
+    a.status
+   ])
+  )
+ }
+
+ `;
+}
+
+function renderStudentResult(s){
+
+ let r=
+ db.results.find(
+  x=>x.studentId===s.id
+ );
+
+ if(!r){
+
+  $("studentResultPreview").innerHTML=
+  `<p class="muted">No result saved for this student.</p>`;
+
+  return;
+ }
+
+ $("studentResultPreview").innerHTML=
+ buildResultPreview(s,r);
+}
+
+
+/* =====================================================
+ FEE COLLECTION
+===================================================== */
+
+function renderPaymentStudentSummary(){
+
+ let s=
+ db.students.find(
+  x=>x.id===$("paymentStudent").value
+ );
+
+ if(!s){
+
+  $("paymentStudentSummary").innerHTML="";
+  return;
+ }
+
+ let f=
+ studentFeeCalculation(s);
+
+ $("paymentStudentSummary").innerHTML=`
+
+ <div class="student-fee-summary">
+
+  <div>
+   <small>Gross Fee</small>
+   <strong>${money(f.gross)}</strong>
+  </div>
+
+  <div class="concession">
+   <small>Concession</small>
+   <strong>${money(f.concession)}</strong>
+  </div>
+
+  <div>
+   <small>Net Payable</small>
+   <strong>${money(f.total)}</strong>
+  </div>
+
+  <div class="paid">
+   <small>Submitted</small>
+   <strong>${money(f.paid)}</strong>
+  </div>
+
+  <div class="due">
+   <small>Remaining Due</small>
+   <strong>${money(f.due)}</strong>
+  </div>
+
+ </div>
+
+ <b>${escapeHTML(s.name)}</b>
+
+ <span class="muted">
+
+  | Father:
+  ${escapeHTML(s.father)}
+
+  | Roll:
+  ${escapeHTML(s.roll)}
+
+  | ${escapeHTML(s.className)}
+  -${escapeHTML(s.section)}
+
+ </span>
+
+ ${
+  f.concession>0
+  ? `
+  <div class="concession-info"
+       style="margin-top:12px">
+
+   <b>Concession:</b>
+   ${money(f.concession)}
+
+   |
+   ${escapeHTML(
+    s.concessionReason||
+    "Not Specified"
+   )}
+
+  </div>
+  `
+  : ""
+ }
+
+ `;
+}
+
+function studentMatchesSearch(student, query){
+
+ const q = String(query || "")
+  .trim()
+  .toLowerCase();
+
+ if(!q){
+  return true;
+ }
+
+ return [
+  student?.name,
+  student?.father,
+  student?.roll,
+  student?.admission,
+  student?.id,
+  student?.className,
+  student?.section
+ ].some(value =>
+  String(value || "")
+   .toLowerCase()
+   .includes(q)
+ );
+
+}
+
+function studentOptionHTML(student){
+
+ return `
+  <option value="${escapeHTML(student.id)}">
+   ${escapeHTML(student.name)}
+   | Father: ${escapeHTML(student.father)}
+   | Roll: ${escapeHTML(student.roll)}
+   | ${escapeHTML(student.className)}-${escapeHTML(student.section)}
+  </option>
+ `;
+
+}
+
+function filterPaymentStudents(){
+
+ const select = $("paymentStudent");
+ const search = $("paymentStudentSearch");
+
+ if(!select){
+  return;
+ }
+
+ const previousValue = select.value;
+ const query = search?.value || "";
+
+ const students = (db.students || [])
+  .filter(student =>
+   studentMatchesSearch(student, query)
+  );
+
+ select.innerHTML = students.length
+  ? students.map(studentOptionHTML).join("")
+  : `<option value="">No matching student found</option>`;
+
+ if(
+  previousValue &&
+  students.some(student => student.id === previousValue)
+ ){
+  select.value = previousValue;
+ }
+
+ renderPaymentStudentSummary();
+
+}
+
+function getClassFeeDueRows(className){
+
+ return (db.students || [])
+  .filter(student => student.className === className)
+  .sort((a,b) =>
+   String(a.section || "").localeCompare(String(b.section || "")) ||
+   Number(a.roll || 0) - Number(b.roll || 0) ||
+   String(a.name || "").localeCompare(String(b.name || ""))
+  )
+  .map(student => ({
+   student,
+   fee: studentFeeCalculation(student)
+  }));
+
+}
+
+function buildClassFeeDueReportHTML(className, forPrint=false){
+
+ const rows = getClassFeeDueRows(className);
+
+ const totals = rows.reduce((sum,row) => {
+  sum.gross += row.fee.gross;
+  sum.concession += row.fee.concession;
+  sum.total += row.fee.total;
+  sum.paid += row.fee.paid;
+  sum.due += row.fee.due;
+  return sum;
+ },{
+  gross:0,
+  concession:0,
+  total:0,
+  paid:0,
+  due:0
+ });
+
+ const table = htmlTable(
+  [
+   "Roll",
+   "Student",
+   "Father",
+   "Section",
+   "Gross Fee",
+   "Concession",
+   "Net Payable",
+   "Paid",
+   "Due"
+  ],
+  rows.map(({student,fee}) => [
+   escapeHTML(student.roll || "-"),
+   escapeHTML(student.name || "-"),
+   escapeHTML(student.father || "-"),
+   escapeHTML(student.section || "-"),
+   money(fee.gross),
+   money(fee.concession),
+   money(fee.total),
+   money(fee.paid),
+   money(fee.due)
+  ])
+ );
+
+ const summary = `
+  <div class="report-summary">
+   <span>Students: <strong>${rows.length}</strong></span>
+   <span>Net Payable: <strong>${money(totals.total)}</strong></span>
+   <span>Collected: <strong>${money(totals.paid)}</strong></span>
+   <span>Outstanding: <strong>${money(totals.due)}</strong></span>
+  </div>
+ `;
+
+ if(!forPrint){
+  return summary + (rows.length
+   ? table
+   : `<p class="muted">No students found in this class.</p>`);
+ }
+
+ return `
+  <div style="${forPrint ? 'page-break-after:always;' : ''}">
+   <h2 style="text-align:center;margin:8px 0 4px;">
+    CLASS-WISE FEE DUE REPORT
+   </h2>
+   <div style="text-align:center;margin-bottom:12px;">
+    <b>Class:</b> ${escapeHTML(className)}
+    &nbsp; | &nbsp;
+    <b>Session:</b> ${escapeHTML(db.school.session || "")}
+   </div>
+   ${summary}
+   ${rows.length ? table : '<p>No students found.</p>'}
+  </div>
+ `;
+
+}
+
+function renderClassFeeDueReport(){
+
+ const className = $("classFeeReportClass")?.value;
+ const target = $("classFeeDueReport");
+
+ if(!target){
+  return;
+ }
+
+ if(!className){
+  target.innerHTML = `<p class="muted">Select a class to view fee dues.</p>`;
+  return;
+ }
+
+ target.innerHTML = buildClassFeeDueReportHTML(className);
+
+}
+
+function printClassFeeDueReport(){
+
+ const className = $("classFeeReportClass")?.value;
+
+ if(!className){
+  alert("Select a class.");
+  return;
+ }
+
+ const html = `
+  <div style="width:196mm;margin:auto;font-family:Arial;color:#222;">
+   ${schoolHeader()}
+   ${buildClassFeeDueReportHTML(className,true)}
+  </div>
+ `;
+
+ printDocument(html);
+
+}
+
+function printAllClassFeeDueReports(){
+
+ const classes = (db.classes || [])
+  .filter(className =>
+   (db.students || []).some(student => student.className === className)
+  );
+
+ if(!classes.length){
+  alert("No class fee data available.");
+  return;
+ }
+
+ const html = `
+  <div style="width:196mm;margin:auto;font-family:Arial;color:#222;">
+   ${classes.map((className,index) => `
+    ${schoolHeader()}
+    ${buildClassFeeDueReportHTML(className,true)}
+   `).join("")}
+  </div>
+ `;
+
+ printDocument(html);
+
+}
+
+async function collectFee(){
+
+ let studentId =
+ $("paymentStudent").value;
+
+ let s =
+ db.students.find(
+  x => x.id === studentId
+ );
+
+ if(!s){
+
+  alert("Select student.");
+
+  return;
+ }
+
+
+ let amount =
+ Number(
+  $("paymentAmount").value
+ );
+
+ if(amount <= 0){
+
+  alert("Enter valid amount.");
+
+  return;
+ }
+
+
+ let calc =
+ studentFeeCalculation(s);
+
+
+ if(amount > calc.due){
+
+  let ok = await showConfirm(
+   "Payment amount is greater than current due (" +
+   money(calc.due) +
+   "). Continue?"
+  );
+
+  if(!ok) return;
+
+ }
+
+
+ let now = new Date();
+
+
+ let receipt =
+ "REC-" +
+ Date.now()
+ .toString()
+ .slice(-10);
+
+
+ let payment = {
+
+  id:
+   "PAY-" + Date.now(),
+
+  receipt,
+
+  studentId,
+
+  feeType:
+   $("paymentFeeType").value,
+
+  amount,
+
+  month:
+   $("paymentMonth").value,
+
+  mode:
+   $("paymentMode").value,
+
+  note:
+   $("paymentNote").value.trim(),
+
+  dateISO:
+   todayISO(),
+
+  date:
+   now.toLocaleDateString("en-IN"),
+
+  time:
+   now.toLocaleTimeString("en-IN")
+
+ };
+
+
+ /* =========================================
+    SAVE PAYMENT TO SQLITE
+ ========================================= */
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.savePayment
+  ){
+
+   alert(
+    "Payment database API not available."
+   );
+
+   return;
+  }
+
+
+  let response =
+   await window.schoolAPI.savePayment(
+    payment
+   );
+
+
+  if(
+   !response ||
+   response.success !== true
+  ){
+
+   alert(
+    "Payment could not be saved."
+   );
+
+   return;
+
+  }
+
+
+  /*
+   SQLite save successful hone ke baad hi
+   frontend data me payment add hoga.
+  */
+
+  db.payments.push(payment);
+
+
+  $("paymentAmount").value = "";
+
+  $("paymentNote").value = "";
+
+
+  /*
+   Temporary localStorage backup.
+   Final migration ke baad remove hoga.
+  */
+
+  saveDB();
+
+
+  /*
+   Existing receipt workflow
+  */
+
+  printReceipt(payment.id);
+
+
+ }catch(error){
+
+  console.error(
+   "Payment Save Error:",
+   error
+  );
+
+  alert(
+   "Payment could not be saved."
+  );
+
+ }
+
+}
+
+
+/* =====================================================
+ MONTHLY ATTENDANCE SYSTEM
+===================================================== */
+
+
+/* ---------------------------------
+ ADMIN WORKING DAYS SETUP
+--------------------------------- */
+
+function toggleAttendanceSetupClass(){
+
+ let mode=$("attendanceSetupMode").value;
+
+ $("attendanceSetupClass").style.display=
+ mode==="class"
+ ? ""
+ : "none";
+
+}
+
+
+async function saveAttendanceWorkingDays(){
+
+ let session =
+ $("attendanceSetupSession").value.trim();
+
+ let month =
+ $("attendanceSetupMonth").value;
+
+ let mode =
+ $("attendanceSetupMode").value;
+
+ let className =
+ mode === "class"
+ ? $("attendanceSetupClass").value
+ : "ALL";
+
+ let days =
+ Number(
+  $("attendanceSetupDays").value
+ );
+
+
+ if(!session){
+
+  alert("Enter session.");
+  return;
+
+ }
+
+ if(!month){
+
+  alert("Select month.");
+  return;
+
+ }
+
+ if(!days || days < 1 || days > 31){
+
+  alert("Enter valid Working Days.");
+  return;
+
+ }
+
+ if(mode === "class" && !className){
+
+  alert("Select class.");
+  return;
+
+ }
+
+
+ let existing =
+ db.attendanceWorkingDays.find(x =>
+
+  x.session === session &&
+  x.month === month &&
+  x.className === className
+
+ );
+
+
+ let data;
+
+
+ if(existing){
+
+  data = {
+
+   ...existing,
+
+   workingDays: days
+
+  };
+
+ }else{
+
+  data = {
+
+   id: "WD-" + Date.now(),
+
+   session,
+
+   month,
+
+   className,
+
+   workingDays: days
+
+  };
+
+ }
+
+
+ /* SAVE TO SQLITE */
+
+ try{
+
+  let response =
+   await window.schoolAPI
+   .saveAttendanceWorkingDays(data);
+
+
+  if(
+   !response ||
+   response.success !== true
+  ){
+
+   alert(
+    "Working Days could not be saved."
+   );
+
+   return;
+
+  }
+
+
+  /* UPDATE FRONTEND DATA */
+
+  if(existing){
+
+   existing.workingDays = days;
+
+  }else{
+
+   db.attendanceWorkingDays.push(data);
+
+  }
+
+
+  $("attendanceSetupDays").value = "";
+
+
+  /* Temporary localStorage backup */
+
+  saveDB();
+
+
+  alert(
+   "Working Days saved successfully."
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "Working Days Save Error:",
+   error
+  );
+
+  alert(
+   "Working Days could not be saved."
+  );
+
+ }
+
+}
+
+
+async function deleteAttendanceWorkingDays(id){
+
+ if(
+  !(await showConfirm(
+   "Delete this Working Days setting?"
+  ))
+ ){
+  return;
+ }
+
+
+ try{
+
+  let response =
+   await window.schoolAPI
+   .deleteAttendanceWorkingDays(id);
+
+
+  if(
+   !response ||
+   response.success !== true
+  ){
+
+   alert(
+    "Working Days could not be deleted."
+   );
+
+   return;
+
+  }
+
+
+  db.attendanceWorkingDays =
+   db.attendanceWorkingDays.filter(
+    x => x.id !== id
+   );
+
+
+  /* Temporary localStorage backup */
+
+  saveDB();
+
+
+ }catch(error){
+
+  console.error(
+   "Working Days Delete Error:",
+   error
+  );
+
+  alert(
+   "Working Days could not be deleted."
+  );
+
+ }
+
+}
+
+
+function renderAttendanceWorkingDays(){
+
+ if(!$("attendanceWorkingDaysList"))
+  return;
+
+
+ let rows=[
+  ...db.attendanceWorkingDays
+ ];
+
+
+ rows.sort((a,b)=>
+  String(a.month)
+  .localeCompare(String(b.month))
+ );
+
+
+ $("attendanceWorkingDaysList").innerHTML=
+ rows.map(x=>`
+
+ <tr>
+
+  <td>
+   ${escapeHTML(x.session)}
+  </td>
+
+  <td>
+   ${escapeHTML(monthName(x.month))}
+  </td>
+
+  <td>
+   ${
+    x.className==="ALL"
+    ? "All Classes"
+    : escapeHTML(x.className)
+   }
+  </td>
+
+  <td>
+   ${Number(x.workingDays||0)}
+  </td>
+
+  <td>
+
+   <button
+    class="btn red small"
+    onclick="deleteAttendanceWorkingDays('${x.id}')">
+
+    Delete
+
+   </button>
+
+  </td>
+
+ </tr>
+
+ `).join("");
+
+
+ if(!rows.length){
+
+  $("attendanceWorkingDaysList").innerHTML=`
+
+   <tr>
+
+    <td colspan="5">
+     No Working Days configured.
+    </td>
+
+   </tr>
+
+  `;
+
+ }
+
+}
+
+
+/* ---------------------------------
+ GET WORKING DAYS
+
+ Priority:
+ Specific Class > All Classes
+--------------------------------- */
+
+function getAttendanceWorkingDays(
+ session,
+ month,
+ className
+){
+
+ let specific=
+ db.attendanceWorkingDays.find(x=>
+
+  x.session===session &&
+  x.month===month &&
+  x.className===className
+
+ );
+
+
+ if(specific){
+
+  return Number(
+   specific.workingDays||0
+  );
+
+ }
+
+
+ let common=
+ db.attendanceWorkingDays.find(x=>
+
+  x.session===session &&
+  x.month===month &&
+  x.className==="ALL"
+
+ );
+
+
+ return common
+ ? Number(common.workingDays||0)
+ : 0;
+
+}
+
+
+/* ---------------------------------
+ MONTH NAME
+--------------------------------- */
+
+function monthName(value){
+
+ if(!value)return "-";
+
+ let [year,month]=
+ value.split("-");
+
+
+ let names=[
+
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+
+ ];
+
+
+ return (
+  names[Number(month)-1]+
+  " "+
+  year
+ );
+
+}
+
+
+/* ---------------------------------
+ LOAD CLASS ATTENDANCE
+--------------------------------- */
+
+function loadMonthlyClassAttendance(){
+
+ let className=
+ $("attendanceClass").value;
+
+ let section=
+ $("attendanceSection").value;
+
+ let month=
+ $("attendanceMonth").value;
+
+ let session=
+ db.school.session;
+
+
+ if(
+  !className ||
+  !section ||
+  !month
+ ){
+
+  $("monthlyAttendanceList").innerHTML=`
+
+   <tr>
+
+    <td colspan="7">
+     Select Class, Section and Month.
+    </td>
+
+   </tr>
+
+  `;
+
+  return;
+
+ }
+
+
+ let workingDays=
+ getAttendanceWorkingDays(
+  session,
+  month,
+  className
+ );
+
+
+ if(!workingDays){
+
+  $("attendanceWorkingInfo").innerHTML=`
+
+   <b>Working Days not configured.</b>
+
+   Admin → Attendance Working Days Setup me
+   ${escapeHTML(monthName(month))}
+   ke Working Days set karein.
+
+  `;
+
+
+  $("monthlyAttendanceList").innerHTML=`
+
+   <tr>
+
+    <td colspan="7">
+     Working Days not configured.
+    </td>
+
+   </tr>
+
+  `;
+
+  return;
+
+ }
+
+
+ $("attendanceWorkingInfo").innerHTML=`
+
+  <b>Session:</b>
+  ${escapeHTML(session)}
+
+  &nbsp; | &nbsp;
+
+  <b>Month:</b>
+  ${escapeHTML(monthName(month))}
+
+  &nbsp; | &nbsp;
+
+  <b>Working Days:</b>
+  ${workingDays}
+
+ `;
+
+
+ let students=
+ db.students.filter(s=>
+
+  s.className===className &&
+  s.section===section
+
+ );
+
+
+ students.sort((a,b)=>{
+
+  let x=Number(a.roll);
+  let y=Number(b.roll);
+
+  if(!isNaN(x) && !isNaN(y))
+   return x-y;
+
+  return String(a.roll)
+  .localeCompare(String(b.roll));
+
+ });
+
+
+ $("monthlyAttendanceList").innerHTML=
+ students.map(s=>{
+
+  let record=
+  db.attendance.find(a=>
+
+   a.studentId===s.id &&
+   a.session===session &&
+   a.month===month
+
+  );
+
+
+  let present=
+  record
+  ? Number(record.presentDays||0)
+  : "";
+
+
+  let absent=
+  record
+  ? Math.max(
+     0,
+     workingDays-present
+    )
+  : "";
+
+
+  let percentage=
+  record
+  ? (
+     workingDays>0
+     ? (
+        present/
+        workingDays*
+        100
+       ).toFixed(2)
+     : "0.00"
+    )
+  : "";
+
+
+  return`
+
+  <tr
+   class="monthlyAttendanceRow"
+   data-student="${s.id}"
+   data-working="${workingDays}"
+  >
+
+   <td>
+    ${escapeHTML(s.roll)}
+   </td>
+
+   <td>
+    <b>${escapeHTML(s.name)}</b>
+   </td>
+
+   <td>
+    ${escapeHTML(s.father)}
+   </td>
+
+   <td>
+    ${workingDays}
+   </td>
+
+   <td style="width:130px">
+
+    <input
+     type="number"
+     class="monthlyPresentInput"
+     min="0"
+     max="${workingDays}"
+     value="${present}"
+     placeholder="Present"
+     oninput="calculateMonthlyAttendanceRow(this)"
+    >
+
+   </td>
+
+   <td class="monthlyAbsent">
+    ${absent}
+   </td>
+
+   <td class="monthlyPercentage">
+    ${
+     percentage!==""
+     ? percentage+"%"
+     : ""
+    }
+   </td>
+
+  </tr>
+
+  `;
+
+ }).join("");
+
+
+ if(!students.length){
+
+  $("monthlyAttendanceList").innerHTML=`
+
+   <tr>
+
+    <td colspan="7">
+     No students found in this Class / Section.
+    </td>
+
+   </tr>
+
+  `;
+
+ }
+
+}
+
+
+/* ---------------------------------
+ LIVE ABSENT + PERCENTAGE
+--------------------------------- */
+
+function calculateMonthlyAttendanceRow(input){
+
+ let row=
+ input.closest(
+  ".monthlyAttendanceRow"
+ );
+
+
+ let working=
+ Number(row.dataset.working)||0;
+
+
+ if(input.value===""){
+
+  row.querySelector(
+   ".monthlyAbsent"
+  ).innerText="";
+
+
+  row.querySelector(
+   ".monthlyPercentage"
+  ).innerText="";
+
+  return;
+
+ }
+
+
+ let present=
+ Number(input.value)||0;
+
+
+ if(present<0){
+
+  present=0;
+  input.value=0;
+
+ }
+
+
+ if(present>working){
+
+  present=working;
+  input.value=working;
+
+ }
+
+
+ let absent=
+ working-present;
+
+
+ let percentage=
+ working>0
+ ? (
+    present/
+    working*
+    100
+   ).toFixed(2)
+ : "0.00";
+
+
+ row.querySelector(
+  ".monthlyAbsent"
+ ).innerText=
+ absent;
+
+
+ row.querySelector(
+  ".monthlyPercentage"
+ ).innerText=
+ percentage+"%";
+
+}
+
+
+/* ---------------------------------
+ SAVE MONTHLY ATTENDANCE
+--------------------------------- */
+
+async function saveMonthlyClassAttendance(){
+
+ let className =
+ $("attendanceClass").value;
+
+ let section =
+ $("attendanceSection").value;
+
+ let month =
+ $("attendanceMonth").value;
+
+ let session =
+ db.school.session;
+
+
+ if(
+  !className ||
+  !section ||
+  !month
+ ){
+
+  alert(
+   "Select Class, Section and Month."
+  );
+
+  return;
+
+ }
+
+
+ let workingDays =
+ getAttendanceWorkingDays(
+  session,
+  month,
+  className
+ );
+
+
+ if(!workingDays){
+
+  alert(
+   "Working Days not configured. Please configure it from Admin."
+  );
+
+  return;
+
+ }
+
+
+ let rows = [
+  ...document.querySelectorAll(
+   ".monthlyAttendanceRow"
+  )
+ ];
+
+
+ if(!rows.length){
+
+  alert("No students found.");
+
+  return;
+
+ }
+
+
+ let saved = 0;
+
+
+ for(let row of rows){
+
+  let input =
+   row.querySelector(
+    ".monthlyPresentInput"
+   );
+
+
+  /*
+   Blank means attendance
+   abhi enter nahi hui.
+  */
+
+  if(input.value === ""){
+   continue;
+  }
+
+
+  let present =
+   Number(input.value);
+
+
+  if(
+   present < 0 ||
+   present > workingDays
+  ){
+
+   alert(
+    "Present Days cannot be greater than Working Days."
+   );
+
+   return;
+
+  }
+
+
+  let studentId =
+   row.dataset.student;
+
+
+  let absent =
+   workingDays - present;
+
+
+  let percentage =
+   Number(
+    (
+     present /
+     workingDays *
+     100
+    ).toFixed(2)
+   );
+
+
+  /*
+   Existing attendance check
+  */
+
+  let existing =
+   db.attendance.find(a =>
+
+    a.studentId === studentId &&
+    a.session === session &&
+    a.month === month
+
+   );
+
+
+  let attendance;
+
+
+  if(existing){
+
+   attendance = {
+
+    ...existing,
+
+    className,
+    section,
+    workingDays,
+
+    presentDays:
+     present,
+
+    absentDays:
+     absent,
+
+    percentage,
+
+    updatedAt:
+     new Date().toISOString()
+
+   };
+
+  }else{
+
+   attendance = {
+
+    id:
+     "ATT-" +
+     Date.now() +
+     "-" +
+     studentId,
+
+    studentId,
+
+    session,
+
+    className,
+
+    section,
+
+    month,
+
+    workingDays,
+
+    presentDays:
+     present,
+
+    absentDays:
+     absent,
+
+    percentage,
+
+    createdAt:
+     new Date().toISOString()
+
+   };
+
+  }
+
+
+  /* =========================================
+     SAVE TO SQLITE
+  ========================================= */
+
+  try{
+
+   let response =
+    await window.schoolAPI
+    .saveStudentAttendance(
+     attendance
+    );
+
+
+   if(
+    !response ||
+    response.success !== true
+   ){
+
+    console.error(
+     "Attendance save failed:",
+     studentId
+    );
+
+    continue;
+
+   }
+
+
+   /*
+    SQLite save successful hone
+    ke baad frontend update karo.
+   */
+
+   if(existing){
+
+    Object.assign(
+     existing,
+     attendance
+    );
+
+   }else{
+
+    db.attendance.push(
+     attendance
+    );
+
+   }
+
+
+   saved++;
+
+
+  }catch(error){
+
+   console.error(
+    "Student Attendance Save Error:",
+    studentId,
+    error
+   );
+
+  }
+
+ }
+
+
+ if(!saved){
+
+  alert(
+   "Attendance could not be saved."
+  );
+
+  return;
+
+ }
+
+
+ /*
+  Temporary localStorage backup.
+  Final migration ke baad remove hoga.
+ */
+
+ saveDB();
+
+
+ alert(
+  saved +
+  " student attendance saved / updated."
+ );
+
+}
+
+/* ---------------------------------
+ STUDENT SESSION TOTAL
+--------------------------------- */
+
+function studentAttendanceCalculation(
+ studentId,
+ session=db.school.session
+){
+
+ let records=
+ db.attendance.filter(a=>
+
+  a.studentId===studentId &&
+  a.session===session &&
+  a.month
+
+ );
+
+
+ records.sort((a,b)=>
+  String(a.month)
+  .localeCompare(String(b.month))
+ );
+
+
+ let workingDays=
+ records.reduce(
+  (total,a)=>
+  total+
+  Number(a.workingDays||0),
+  0
+ );
+
+
+ let presentDays=
+ records.reduce(
+  (total,a)=>
+  total+
+  Number(a.presentDays||0),
+  0
+ );
+
+
+ let absentDays=
+ Math.max(
+  0,
+  workingDays-presentDays
+ );
+
+
+ let percentage=
+ workingDays>0
+ ? Number(
+    (
+     presentDays/
+     workingDays*
+     100
+    ).toFixed(2)
+   )
+ : 0;
+
+
+ return{
+
+  records,
+  workingDays,
+  presentDays,
+  absentDays,
+  percentage
+
+ };
+
+}
+
+
+/* ---------------------------------
+ CLASS SESSION REPORT
+--------------------------------- */
+
+function renderSessionAttendanceReport(){
+
+ if(!$("sessionAttendanceReport"))
+  return;
+
+
+ let className=
+ $("attendanceReportClass").value;
+
+ let section=
+ $("attendanceReportSection").value;
+
+
+ let students=
+ db.students.filter(s=>
+
+  s.className===className &&
+  s.section===section
+
+ );
+
+
+ students.sort((a,b)=>
+  Number(a.roll||0)-
+  Number(b.roll||0)
+ );
+
+
+ $("sessionAttendanceReport").innerHTML=
+ students.map(s=>{
+
+  let x=
+  studentAttendanceCalculation(
+   s.id
+  );
+
+
+  return`
+
+   <tr>
+
+    <td>
+     ${escapeHTML(s.roll)}
+    </td>
+
+    <td>
+     ${escapeHTML(s.name)}
+    </td>
+
+    <td>
+     ${x.workingDays}
+    </td>
+
+    <td>
+     ${x.presentDays}
+    </td>
+
+    <td>
+     ${x.absentDays}
+    </td>
+
+    <td>
+     ${x.percentage.toFixed(2)}%
+    </td>
+
+   </tr>
+
+  `;
+
+ }).join("");
+
+}
+
+
+/* =====================================================
+ CLASS-WISE SUBJECTS
+===================================================== */
+
+function renderClassSubjectSetup(){
+
+ let className=
+ $("subjectSetupClass").value;
+
+ if(!className)return;
+
+ if(!db.classSubjects)
+  db.classSubjects={};
+
+ let selected=
+ db.classSubjects[className];
+
+ if(!Array.isArray(selected))
+  selected=[];
+
+ $("classSubjectCheckboxes").innerHTML=
+ db.subjects.map(subject=>{
+
+  let checked=
+  selected.includes(subject)
+  ? "checked"
+  : "";
+
+  return`
+
+  <label class="subject-check">
+
+   <input
+    type="checkbox"
+    class="classSubjectCheck"
+    value="${escapeHTML(subject)}"
+    ${checked}
+   >
+
+   ${escapeHTML(subject)}
+
+  </label>
+
+  `;
+
+ }).join("");
+}
+
+function showMessage(message){
+
+ let old=
+ document.getElementById("appMessage");
+
+ if(old){
+  old.remove();
+ }
+
+ let box=
+ document.createElement("div");
+
+ box.id="appMessage";
+
+ box.innerHTML=`
+  <div style="font-weight:600;margin-bottom:4px;">
+   ✓ Success
+  </div>
+
+  <div>
+   ${escapeHTML(message)}
+  </div>
+ `;
+
+ box.style.cssText=`
+  position:fixed;
+  right:25px;
+  top:25px;
+  min-width:280px;
+  max-width:420px;
+  padding:14px 18px;
+  background:#ffffff;
+  color:#1f2937;
+  border:1px solid #d1d5db;
+  border-left:4px solid #172554;
+  border-radius:6px;
+  box-shadow:0 8px 25px rgba(0,0,0,.15);
+  z-index:999999;
+  font-size:14px;
+ `;
+
+ document.body.appendChild(box);
+
+ setTimeout(()=>{
+
+  if(box && box.parentNode){
+   box.remove();
+  }
+
+ },2500);
+
+}
+
+/* =========================================
+   ELECTRON SAFE ALERT
+========================================= */
+
+window.alert = function(message){
+
+ showMessage(
+  String(message || "")
+ );
+
+};
+
+/* =========================================
+   ELECTRON SAFE NON-BLOCKING CONFIRM
+========================================= */
+
+function showConfirm(message){
+
+ return new Promise(resolve=>{
+
+  const old = document.getElementById("appConfirmOverlay");
+  if(old){
+   old.remove();
+  }
+
+  const overlay = document.createElement("div");
+  overlay.id = "appConfirmOverlay";
+
+  overlay.innerHTML = `
+   <div id="appConfirmBox" style="
+    width:min(440px,calc(100vw - 40px));
+    background:#ffffff;
+    border-radius:10px;
+    box-shadow:0 20px 60px rgba(0,0,0,.28);
+    padding:22px;
+    color:#1f2937;
+   ">
+    <div style="font-size:18px;font-weight:700;margin-bottom:10px;">
+     Confirmation
+    </div>
+    <div style="font-size:14px;line-height:1.55;white-space:pre-line;margin-bottom:20px;">
+     ${escapeHTML(String(message || "Are you sure?"))}
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;">
+     <button type="button" id="appConfirmCancel" class="btn">Cancel</button>
+     <button type="button" id="appConfirmOk" class="btn red">OK</button>
+    </div>
+   </div>
+  `;
+
+  overlay.style.cssText = `
+   position:fixed;
+   inset:0;
+   display:flex;
+   align-items:center;
+   justify-content:center;
+   padding:20px;
+   background:rgba(15,23,42,.42);
+   z-index:1000000;
+  `;
+
+  document.body.appendChild(overlay);
+
+  const finish = value=>{
+   if(overlay.parentNode){
+    overlay.remove();
+   }
+   resolve(value);
+  };
+
+  overlay.querySelector("#appConfirmOk").onclick = ()=>finish(true);
+  overlay.querySelector("#appConfirmCancel").onclick = ()=>finish(false);
+
+  overlay.onclick = event=>{
+   if(event.target === overlay){
+    finish(false);
+   }
+  };
+
+  const onKey = event=>{
+   if(event.key === "Escape"){
+    document.removeEventListener("keydown", onKey);
+    finish(false);
+   }
+  };
+
+  document.addEventListener("keydown", onKey, {once:true});
+  overlay.querySelector("#appConfirmOk").focus();
+
+ });
+
+}
+
+async function saveClassSubjects(){
+
+ let className =
+  $("subjectSetupClass").value;
+
+
+ if(!className){
+
+  showMessage(
+   "Please select a class."
+  );
+
+  return;
+
+ }
+
+
+ let subjects = [
+  ...document.querySelectorAll(
+   ".classSubjectCheck:checked"
+  )
+ ].map(x => x.value);
+
+
+ if(subjects.length === 0){
+
+  showMessage(
+   "Please select at least one subject."
+  );
+
+  return;
+
+ }
+
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.saveClassSubjects
+  ){
+
+   console.error(
+    "SQLite Class Subjects API not available."
+   );
+
+   showMessage(
+    "Class Subjects database is not available."
+   );
+
+   return;
+
+  }
+
+
+  /*
+   First save permanently in SQLite
+  */
+
+  let response =
+   await window.schoolAPI
+   .saveClassSubjects(
+    className,
+    subjects
+   );
+
+
+  if(
+   !response ||
+   response.success !== true
+  ){
+
+   console.error(
+    "Class Subjects Save Failed:",
+    response
+   );
+
+   showMessage(
+    response?.message ||
+    "Subjects could not be saved."
+   );
+
+   return;
+
+  }
+
+
+  /*
+   SQLite save successful.
+   Now update frontend data.
+  */
+
+  if(!db.classSubjects){
+   db.classSubjects = {};
+  }
+
+
+  db.classSubjects[className] =
+   [...subjects];
+
+
+  /*
+   Temporary localStorage compatibility.
+   Final migration ke baad remove hoga.
+  */
+
+  saveDB();
+
+
+  showMessage(
+   subjects.length +
+   " subjects saved successfully for " +
+   className
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "Class Subjects Save Error:",
+   error
+  );
+
+  showMessage(
+   "Subjects could not be saved."
+  );
+
+ }
+
+}
+
+/* =====================================================
+ CLASS-WISE RESULT SETUP
+===================================================== */
+
+function renderResultSetup(){
+
+ let className =
+ $("resultSetupClass")?.value;
+
+ if(!className){
+  return;
+ }
+
+ if(!db.resultSetup){
+  db.resultSetup = {};
+ }
+
+ let setup =
+ db.resultSetup[className];
+
+
+ /* NEW / NOT YET CONFIGURED CLASS */
+
+ if(!setup){
+
+  $("enableQuarterly").checked = true;
+  $("enableHalfYearly").checked = true;
+  $("enableAnnual").checked = true;
+
+  $("defaultQuarterlyMax").value = 40;
+  $("defaultHalfYearlyMax").value = 60;
+  $("defaultAnnualMax").value = 100;
+
+ }else{
+
+  $("enableQuarterly").checked =
+  setup.exams?.quarterly !== false;
+
+  $("enableHalfYearly").checked =
+  setup.exams?.halfYearly !== false;
+
+  $("enableAnnual").checked =
+  setup.exams?.annual !== false;
+
+
+  $("defaultQuarterlyMax").value =
+  setup.defaultMarks?.quarterly ?? 40;
+
+  $("defaultHalfYearlyMax").value =
+  setup.defaultMarks?.halfYearly ?? 60;
+
+  $("defaultAnnualMax").value =
+  setup.defaultMarks?.annual ?? 100;
+
+ }
+
+
+ renderResultSetupSubjects();
+
+}
+
+
+
+function renderResultSetupSubjects(){
+
+ let className =
+ $("resultSetupClass")?.value;
+
+ if(!className){
+  return;
+ }
+
+
+ /* GET SUBJECTS OF SELECTED CLASS */
+
+ let subjects =
+ db.classSubjects?.[className];
+
+
+ /*
+  Agar class-wise subjects configure nahi hue,
+  to Master Subjects use honge.
+ */
+
+ if(
+  !Array.isArray(subjects) ||
+  subjects.length === 0
+ ){
+
+  subjects = db.subjects || [];
+
+ }
+
+
+ let setup =
+ db.resultSetup?.[className];
+
+
+ /* ENABLED EXAMS */
+
+ let qEnabled =
+ $("enableQuarterly").checked;
+
+ let hEnabled =
+ $("enableHalfYearly").checked;
+
+ let aEnabled =
+ $("enableAnnual").checked;
+
+
+ /* DEFAULT MARKS */
+
+ let qDefault =
+ Number(
+  $("defaultQuarterlyMax").value
+ ) || 0;
+
+ let hDefault =
+ Number(
+  $("defaultHalfYearlyMax").value
+ ) || 0;
+
+ let aDefault =
+ Number(
+  $("defaultAnnualMax").value
+ ) || 0;
+
+
+ /* =========================
+    TABLE HEADER
+ ========================= */
+
+ let head = `
+
+ <tr>
+
+  <th>
+   Subject
+  </th>
+
+ `;
+
+
+ if(qEnabled){
+
+  head += `
+
+   <th>
+    Quarterly Max
+   </th>
+
+  `;
+
+ }
+
+
+ if(hEnabled){
+
+  head += `
+
+   <th>
+    Half Yearly Max
+   </th>
+
+  `;
+
+ }
+
+
+ if(aEnabled){
+
+  head += `
+
+   <th>
+    Annual Max
+   </th>
+
+  `;
+
+ }
+
+
+ head += `
+
+ </tr>
+
+ `;
+
+
+ $("resultSetupTableHead").innerHTML =
+ head;
+
+
+ /* =========================
+    SUBJECT ROWS
+ ========================= */
+
+ $("resultSetupSubjects").innerHTML =
+ subjects.map(subject=>{
+
+  let saved =
+setup?.subjectMarks?.[subject] || {};
+
+
+  let row = `
+
+  <tr
+   class="resultSetupSubjectRow"
+   data-subject="${escapeHTML(subject)}"
+  >
+
+   <td>
+    <b>
+     ${escapeHTML(subject)}
+    </b>
+   </td>
+
+  `;
+
+
+  /* QUARTERLY */
+
+  if(qEnabled){
+
+   row += `
+
+   <td>
+
+    <input
+     type="number"
+     min="0"
+     class="setupQMax"
+     value="${
+      saved.quarterly ??
+      qDefault
+     }"
+    >
+
+   </td>
+
+   `;
+
+  }
+
+
+  /* HALF YEARLY */
+
+  if(hEnabled){
+
+   row += `
+
+   <td>
+
+    <input
+     type="number"
+     min="0"
+     class="setupHMax"
+     value="${
+      saved.halfYearly ??
+      hDefault
+     }"
+    >
+
+   </td>
+
+   `;
+
+  }
+
+
+  /* ANNUAL */
+
+  if(aEnabled){
+
+   row += `
+
+   <td>
+
+    <input
+     type="number"
+     min="0"
+     class="setupAMax"
+     value="${
+      saved.annual ??
+      aDefault
+     }"
+    >
+
+   </td>
+
+   `;
+
+  }
+
+
+  row += `
+
+  </tr>
+
+  `;
+
+
+  return row;
+
+ }).join("");
+
+}
+
+/* =====================================================
+   APPLY DEFAULT RESULT MARKS TO ALL SUBJECTS
+===================================================== */
+
+function applyResultDefaultMarks(exam){
+
+ let value = 0;
+ let selector = "";
+
+
+ if(exam === "quarterly"){
+
+  value =
+   Number(
+    $("defaultQuarterlyMax").value
+   ) || 0;
+
+  selector = ".setupQMax";
+
+ }
+
+
+ if(exam === "halfYearly"){
+
+  value =
+   Number(
+    $("defaultHalfYearlyMax").value
+   ) || 0;
+
+  selector = ".setupHMax";
+
+ }
+
+
+ if(exam === "annual"){
+
+  value =
+   Number(
+    $("defaultAnnualMax").value
+   ) || 0;
+
+  selector = ".setupAMax";
+
+ }
+
+
+ /*
+  Apply new default to EVERY
+  currently displayed subject.
+ */
+
+ document
+ .querySelectorAll(selector)
+ .forEach(input=>{
+
+  input.value = value;
+
+ });
+
+}
+
+
+/* =====================================================
+ SAVE CLASS RESULT SETUP
+===================================================== */
+
+async function saveResultSetup(){
+
+ let className =
+  $("resultSetupClass").value;
+
+
+ if(!className){
+
+  showMessage(
+   "Please select a class."
+  );
+
+  return;
+
+ }
+
+
+ let quarterly =
+  $("enableQuarterly").checked;
+
+ let halfYearly =
+  $("enableHalfYearly").checked;
+
+ let annual =
+  $("enableAnnual").checked;
+
+
+ /* AT LEAST ONE EXAM */
+
+ if(
+  !quarterly &&
+  !halfYearly &&
+  !annual
+ ){
+
+  showMessage(
+   "Please enable at least one examination."
+  );
+
+  return;
+
+ }
+
+
+ let setup = {
+
+  exams: {
+
+   quarterly,
+   halfYearly,
+   annual
+
+  },
+
+  defaultMarks: {
+
+   quarterly:
+    Number(
+     $("defaultQuarterlyMax").value
+    ) || 0,
+
+   halfYearly:
+    Number(
+     $("defaultHalfYearlyMax").value
+    ) || 0,
+
+   annual:
+    Number(
+     $("defaultAnnualMax").value
+    ) || 0
+
+  },
+
+  subjectMarks: {}
+
+ };
+
+
+ /* GET SUBJECT ROWS */
+
+ let rows = [
+  ...document.querySelectorAll(
+   ".resultSetupSubjectRow"
+  )
+ ];
+
+
+ rows.forEach(row => {
+
+  let subject =
+   row.dataset.subject;
+
+
+  setup.subjectMarks[subject] = {};
+
+
+  let q =
+   row.querySelector(
+    ".setupQMax"
+   );
+
+  let h =
+   row.querySelector(
+    ".setupHMax"
+   );
+
+  let a =
+   row.querySelector(
+    ".setupAMax"
+   );
+
+
+  if(q){
+
+   setup.subjectMarks[subject].quarterly =
+    Number(q.value) || 0;
+
+  }
+
+
+  if(h){
+
+   setup.subjectMarks[subject].halfYearly =
+    Number(h.value) || 0;
+
+  }
+
+
+  if(a){
+
+   setup.subjectMarks[subject].annual =
+    Number(a.value) || 0;
+
+  }
+
+ });
+
+
+ /* =========================================
+    SAVE TO SQLITE
+ ========================================= */
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.saveSetting
+  ){
+
+   console.error(
+    "SQLite Settings API not available."
+   );
+
+   showMessage(
+    "Result Setup database is not available."
+   );
+
+   return;
+
+  }
+
+
+  let response =
+   await window.schoolAPI.saveSetting(
+
+    "resultSetup:" + className,
+
+    setup
+
+   );
+
+
+  if(
+   !response ||
+   response.success !== true
+  ){
+
+   console.error(
+    "Result Setup Save Failed:",
+    response
+   );
+
+   showMessage(
+    response?.message ||
+    "Result setup could not be saved."
+   );
+
+   return;
+
+  }
+
+
+  /* =========================================
+     UPDATE FRONTEND DATA
+  ========================================= */
+
+  if(!db.resultSetup){
+   db.resultSetup = {};
+  }
+
+
+  db.resultSetup[className] =
+   setup;
+
+
+  /*
+   Temporary localStorage compatibility
+  */
+
+  saveDB();
+
+
+  showMessage(
+   "Result setup saved successfully for " +
+   className
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "Result Setup Save Error:",
+   error
+  );
+
+  showMessage(
+   "Result setup could not be saved."
+  );
+
+ }
+
+}
+
+/* =====================================================
+ RESULT ENTRY
+===================================================== */
+
+function filterResultStudents(){
+
+ let searchInput =
+ document.getElementById(
+  "resultStudentSearch"
+ );
+
+ let select =
+ document.getElementById(
+  "resultStudent"
+ );
+
+ if(!searchInput || !select){
+  return;
+ }
+
+ let q =
+ String(searchInput.value || "")
+ .toLowerCase()
+ .trim();
+
+
+ /*
+  Current selected student ko remember karo
+ */
+ let currentValue =
+ select.value;
+
+
+ let students =
+ (db.students || []).filter(s=>{
+
+  if(!q){
+   return true;
+  }
+
+  return (
+
+   String(s.name || "")
+   .toLowerCase()
+   .includes(q)
+
+   ||
+
+   String(s.father || "")
+   .toLowerCase()
+   .includes(q)
+
+   ||
+
+   String(s.roll || "")
+   .toLowerCase()
+   .includes(q)
+
+   ||
+
+   String(s.admission || "")
+   .toLowerCase()
+   .includes(q)
+
+   ||
+
+   String(s.id || "")
+   .toLowerCase()
+   .includes(q)
+
+   ||
+
+   String(s.className || "")
+   .toLowerCase()
+   .includes(q)
+
+  );
+
+ });
+
+
+ /*
+  Roll number wise sorting where possible
+ */
+ students.sort((a,b)=>{
+
+  let classCompare =
+  String(a.className || "")
+  .localeCompare(
+   String(b.className || "")
+  );
+
+  if(classCompare!==0){
+   return classCompare;
+  }
+
+
+  let sectionCompare =
+  String(a.section || "")
+  .localeCompare(
+   String(b.section || "")
+  );
+
+  if(sectionCompare!==0){
+   return sectionCompare;
+  }
+
+
+  let aRoll = Number(a.roll);
+  let bRoll = Number(b.roll);
+
+  if(
+   !isNaN(aRoll) &&
+   !isNaN(bRoll)
+  ){
+   return aRoll-bRoll;
+  }
+
+
+  return String(a.roll || "")
+  .localeCompare(
+   String(b.roll || "")
+  );
+
+ });
+
+
+ /*
+  Dropdown create
+ */
+ select.innerHTML = `
+
+  <option value="">
+   ${
+    students.length
+    ? "Select Student ("+students.length+" found)"
+    : "No Student Found"
+   }
+  </option>
+
+ ` + students.map(s=>`
+
+  <option value="${escapeHTML(s.id)}">
+
+   ${escapeHTML(s.name)}
+
+   | Father:
+   ${escapeHTML(s.father)}
+
+   | Roll:
+   ${escapeHTML(s.roll)}
+
+   | ${escapeHTML(s.className)}
+   -${escapeHTML(s.section)}
+
+   | ID:
+   ${escapeHTML(s.id)}
+
+  </option>
+
+ `).join("");
+
+
+ /*
+  Preserve previous selection if still available
+ */
+ if(
+  currentValue &&
+  students.some(
+   s=>s.id===currentValue
+  )
+ ){
+  select.value=currentValue;
+ }
+
+}
+
+function resultSubjectTemplate(student){
+
+ if(!student)return[];
+
+ let subjects=
+ db.classSubjects[
+  student.className
+ ];
+
+ if(
+  !Array.isArray(subjects) ||
+  subjects.length===0
+ ){
+  subjects=db.subjects;
+ }
+
+
+ /* CLASS RESULT SETUP */
+
+ let setup=
+ db.resultSetup?.[
+  student.className
+ ] || {};
+
+
+ let exams=
+ setup.exams || {
+  quarterly:true,
+  halfYearly:true,
+  annual:true
+ };
+
+
+ let defaultMarks=
+ setup.defaultMarks || {
+  quarterly:40,
+  halfYearly:60,
+  annual:100
+ };
+
+
+ let subjectMarks=
+ setup.subjectMarks || {};
+
+
+ return subjects.map(subject=>{
+
+  let custom=
+  subjectMarks[subject] || {};
+
+  return{
+
+   subject,
+
+   quarterly:{
+    enabled:
+     exams.quarterly!==false,
+
+    max:
+     Number(
+      custom.quarterly ??
+      defaultMarks.quarterly ??
+      40
+     ),
+
+    obtained:""
+   },
+
+   halfYearly:{
+    enabled:
+     exams.halfYearly!==false,
+
+    max:
+     Number(
+      custom.halfYearly ??
+      defaultMarks.halfYearly ??
+      60
+     ),
+
+    obtained:""
+   },
+
+   annual:{
+    enabled:
+     exams.annual!==false,
+
+    max:
+     Number(
+      custom.annual ??
+      defaultMarks.annual ??
+      100
+     ),
+
+    obtained:""
+   }
+
+  };
+
+ });
+
+}
+
+
+// YAHA NAYA loadResultForm() AAYEGA
+
+function loadResultForm(){
+
+ let sid = $("resultStudent").value;
+
+ let student = db.students.find(
+  s => s.id === sid
+ );
+
+ if(!student){
+
+  $("marksEntryTable").innerHTML = "";
+
+  if($("marksEntryHead")){
+   $("marksEntryHead").innerHTML = "";
+  }
+
+  return;
+ }
+
+
+ /* =========================================
+    CLASS RESULT SETUP
+ ========================================= */
+
+ let setup =
+ db.resultSetup?.[student.className] || {};
+
+ let exams =
+ setup.exams || {
+  quarterly:true,
+  halfYearly:true,
+  annual:true
+ };
+
+
+ /* =========================================
+    EXISTING STUDENT RESULT
+ ========================================= */
+
+ let existing =
+ db.results.find(
+  r => r.studentId === sid
+ );
+
+
+ /* =========================================
+    GET CLASS SUBJECT TEMPLATE
+ ========================================= */
+
+ let configured =
+ resultSubjectTemplate(student);
+
+ let rows;
+
+
+ if(existing){
+
+  rows = configured.map(template => {
+
+   let old =
+   existing.subjects?.find(
+    x => x.subject === template.subject
+   );
+
+
+   if(!old){
+    return template;
+   }
+
+
+   /*
+    Existing obtained marks preserve honge,
+    lekin Max Marks Admin setup se aayenge.
+   */
+
+   return {
+
+    subject:template.subject,
+
+    quarterly:{
+     enabled:template.quarterly.enabled,
+     max:template.quarterly.max,
+     obtained:
+      old.quarterly?.obtained ?? ""
+    },
+
+    halfYearly:{
+     enabled:template.halfYearly.enabled,
+     max:template.halfYearly.max,
+     obtained:
+      old.halfYearly?.obtained ?? ""
+    },
+
+    annual:{
+     enabled:template.annual.enabled,
+     max:template.annual.max,
+     obtained:
+      old.annual?.obtained ?? ""
+    }
+
+   };
+
+  });
+
+ }else{
+
+  rows = configured;
+
+ }
+
+
+ /* =========================================
+    DYNAMIC TABLE HEADER
+ ========================================= */
+
+ let head = `
+
+ <tr>
+
+  <th rowspan="2">
+   Subject
+  </th>
+
+  ${
+   exams.quarterly !== false
+   ? `<th colspan="2">Quarterly</th>`
+   : ""
+  }
+
+  ${
+   exams.halfYearly !== false
+   ? `<th colspan="2">Half Yearly</th>`
+   : ""
+  }
+
+  ${
+   exams.annual !== false
+   ? `<th colspan="2">Annual</th>`
+   : ""
+  }
+
+  <th colspan="2">
+   Grand Total
+  </th>
+
+ </tr>
+
+
+ <tr>
+
+  ${
+   exams.quarterly !== false
+   ? `
+    <th>Max</th>
+    <th>Obt.</th>
+   `
+   : ""
+  }
+
+  ${
+   exams.halfYearly !== false
+   ? `
+    <th>Max</th>
+    <th>Obt.</th>
+   `
+   : ""
+  }
+
+  ${
+   exams.annual !== false
+   ? `
+    <th>Max</th>
+    <th>Obt.</th>
+   `
+   : ""
+  }
+
+  <th>Max</th>
+  <th>Obt.</th>
+
+ </tr>
+
+ `;
+
+
+ if($("marksEntryHead")){
+  $("marksEntryHead").innerHTML = head;
+ }
+
+
+ /* =========================================
+    MARKS ENTRY ROWS
+ ========================================= */
+
+ $("marksEntryTable").innerHTML =
+ rows.map(r => {
+
+  let qmax =
+   r.quarterly.enabled
+   ? Number(r.quarterly.max || 0)
+   : 0;
+
+  let hmax =
+   r.halfYearly.enabled
+   ? Number(r.halfYearly.max || 0)
+   : 0;
+
+  let amax =
+   r.annual.enabled
+   ? Number(r.annual.max || 0)
+   : 0;
+
+
+  let qobt =
+   r.quarterly.enabled
+   ? Number(r.quarterly.obtained || 0)
+   : 0;
+
+  let hobt =
+   r.halfYearly.enabled
+   ? Number(r.halfYearly.obtained || 0)
+   : 0;
+
+  let aobt =
+   r.annual.enabled
+   ? Number(r.annual.obtained || 0)
+   : 0;
+
+
+  return `
+
+  <tr data-subject="${escapeHTML(r.subject)}">
+
+   <td>
+    <b>${escapeHTML(r.subject)}</b>
+   </td>
+
+
+   ${
+    r.quarterly.enabled
+    ? `
+
+     <td>
+      <input
+       class="qmax"
+       type="number"
+       value="${qmax}"
+       readonly>
+     </td>
+
+     <td>
+      <input
+       class="qobt"
+       type="number"
+       min="0"
+       max="${qmax}"
+       value="${r.quarterly.obtained ?? ""}">
+     </td>
+
+    `
+    : `
+     <input
+      class="qmax"
+      type="hidden"
+      value="0">
+
+     <input
+      class="qobt"
+      type="hidden"
+      value="0">
+    `
+   }
+
+
+   ${
+    r.halfYearly.enabled
+    ? `
+
+     <td>
+      <input
+       class="hmax"
+       type="number"
+       value="${hmax}"
+       readonly>
+     </td>
+
+     <td>
+      <input
+       class="hobt"
+       type="number"
+       min="0"
+       max="${hmax}"
+       value="${r.halfYearly.obtained ?? ""}">
+     </td>
+
+    `
+    : `
+     <input
+      class="hmax"
+      type="hidden"
+      value="0">
+
+     <input
+      class="hobt"
+      type="hidden"
+      value="0">
+    `
+   }
+
+
+   ${
+    r.annual.enabled
+    ? `
+
+     <td>
+      <input
+       class="amax"
+       type="number"
+       value="${amax}"
+       readonly>
+     </td>
+
+     <td>
+      <input
+       class="aobt"
+       type="number"
+       min="0"
+       max="${amax}"
+       value="${r.annual.obtained ?? ""}">
+     </td>
+
+    `
+    : `
+     <input
+      class="amax"
+      type="hidden"
+      value="0">
+
+     <input
+      class="aobt"
+      type="hidden"
+      value="0">
+    `
+   }
+
+
+   <td>
+    ${qmax + hmax + amax}
+   </td>
+
+   <td>
+    ${qobt + hobt + aobt}
+   </td>
+
+  </tr>
+
+  `;
+
+ }).join("");
+
+
+ /* =========================================
+    LOAD OTHER SAVED RESULT DATA
+ ========================================= */
+
+ if(existing){
+
+  $("workingDays").value =
+   existing.workingDays || "";
+
+  $("attendanceDays").value =
+   existing.attendanceDays || "";
+
+  $("resultRemarks").value =
+   existing.remarks || "";
+
+  $("promotedTo").value =
+   existing.promotedTo || "";
+
+  $("nextSessionDate").value =
+   existing.nextSessionDate || "";
+
+  $("activityComputer").value =
+   existing.activities?.computer || "";
+
+  $("activityProject").value =
+   existing.activities?.project || "";
+
+  $("activityPhysical").value =
+   existing.activities?.physical || "";
+
+  $("activityUniform").value =
+   existing.activities?.uniform || "";
+
+  $("activityDiscipline").value =
+   existing.activities?.discipline || "";
+
+ }else{
+
+  [
+   "workingDays",
+   "attendanceDays",
+   "resultRemarks",
+   "promotedTo",
+   "nextSessionDate",
+   "activityComputer",
+   "activityProject",
+   "activityPhysical",
+   "activityUniform",
+   "activityDiscipline"
+  ].forEach(id => {
+
+   if($(id)){
+    $(id).value = "";
+   }
+
+  });
+
+ }
+
+}
+
+function readMarksTable(){
+
+ let sid = $("resultStudent").value;
+
+ let student = db.students.find(
+  s => s.id === sid
+ );
+
+ let setup =
+  db.resultSetup?.[student?.className] || {};
+
+ let exams =
+  setup.exams || {
+   quarterly:true,
+   halfYearly:true,
+   annual:true
+  };
+
+
+ return [
+  ...$("marksEntryTable")
+  .querySelectorAll("tr")
+ ].map(row => {
+
+  let qmax = row.querySelector(".qmax");
+  let qobt = row.querySelector(".qobt");
+
+  let hmax = row.querySelector(".hmax");
+  let hobt = row.querySelector(".hobt");
+
+  let amax = row.querySelector(".amax");
+  let aobt = row.querySelector(".aobt");
+
+
+  return {
+
+   subject: row.dataset.subject,
+
+   quarterly:{
+
+    enabled:
+     exams.quarterly !== false,
+
+    max:
+     Number(qmax?.value || 0),
+
+    obtained:
+     Number(qobt?.value || 0)
+
+   },
+
+
+   halfYearly:{
+
+    enabled:
+     exams.halfYearly !== false,
+
+    max:
+     Number(hmax?.value || 0),
+
+    obtained:
+     Number(hobt?.value || 0)
+
+   },
+
+
+   annual:{
+
+    enabled:
+     exams.annual !== false,
+
+    max:
+     Number(amax?.value || 0),
+
+    obtained:
+     Number(aobt?.value || 0)
+
+   }
+
+  };
+
+ });
+
+}
+
+async function saveResult(showAlert=true){
+
+ let sid =
+ $("resultStudent").value;
+
+ if(!sid){
+
+  alert("Select student.");
+  return false;
+
+ }
+
+
+ let subjects =
+ readMarksTable();
+
+
+ for(let x of subjects){
+
+  if(
+
+   (
+    x.quarterly.enabled &&
+    x.quarterly.obtained > x.quarterly.max
+   )
+
+   ||
+
+   (
+    x.halfYearly.enabled &&
+    x.halfYearly.obtained > x.halfYearly.max
+   )
+
+   ||
+
+   (
+    x.annual.enabled &&
+    x.annual.obtained > x.annual.max
+   )
+
+  ){
+
+   alert(
+    "Obtained marks cannot be greater than maximum marks for " +
+    x.subject
+   );
+
+   return false;
+
+  }
+
+ }
+
+
+ let result = {
+
+  studentId: sid,
+
+  /*
+   SQLite me result session-wise save hoga.
+  */
+
+  session:
+   db.school.session,
+
+  subjects,
+
+  workingDays:
+   Number(
+    $("workingDays").value
+   ) || 0,
+
+  attendanceDays:
+   Number(
+    $("attendanceDays").value
+   ) || 0,
+
+  remarks:
+   $("resultRemarks").value.trim(),
+
+  promotedTo:
+   $("promotedTo").value.trim(),
+
+  nextSessionDate:
+   $("nextSessionDate").value,
+
+  activities: {
+
+   computer:
+    $("activityComputer").value.trim(),
+
+   project:
+    $("activityProject").value.trim(),
+
+   physical:
+    $("activityPhysical").value.trim(),
+
+   uniform:
+    $("activityUniform").value.trim(),
+
+   discipline:
+    $("activityDiscipline").value.trim()
+
+  }
+
+ };
+
+
+ /* =========================================
+    SAVE RESULT TO SQLITE
+ ========================================= */
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.saveStudentResult
+  ){
+
+   console.error(
+    "SQLite Result API not available."
+   );
+
+   alert(
+    "Result database is not available."
+   );
+
+   return false;
+
+  }
+
+
+  let response =
+   await window.schoolAPI
+   .saveStudentResult(result);
+
+
+  if(
+   !response ||
+   response.success !== true
+  ){
+
+   console.error(
+    "Result SQLite Save Failed:",
+    response
+   );
+
+   alert(
+    "Result could not be saved."
+   );
+
+   return false;
+
+  }
+
+
+  /*
+   SQLite successfully save hone ke baad
+   existing frontend db update karo.
+  */
+
+  let index =
+   db.results.findIndex(
+    r =>
+     r.studentId === sid &&
+     (
+      !r.session ||
+      r.session === result.session
+     )
+   );
+
+
+  if(index >= 0){
+
+   db.results[index] =
+    result;
+
+  }else{
+
+   db.results.push(
+    result
+   );
+
+  }
+
+
+  /*
+   Temporary localStorage compatibility.
+   Final migration ke baad remove karenge.
+  */
+
+  saveDB();
+
+
+  if(showAlert){
+
+   alert(
+    "Result saved successfully."
+   );
+
+  }
+
+
+  return true;
+
+
+ }catch(error){
+
+  console.error(
+   "Student Result Save Error:",
+   error
+  );
+
+  alert(
+   "Result could not be saved."
+  );
+
+  return false;
+
+ }
+
+}
+
+async function previewSelectedResult(){
+
+ let sid =
+ $("resultStudent").value;
+
+ if(!sid){
+  return;
+ }
+
+
+ let saved =
+  await saveResult(false);
+
+
+ if(!saved){
+  return;
+ }
+
+
+ currentStudentID = sid;
+
+ printReportCard();
+
+}
+
+
+/* =====================================================
+ FEE STRUCTURE
+===================================================== */
+
+async function addFeeStructure(){
+
+ let className =
+ $("feeStructureClass").value;
+
+ let type =
+ $("feeStructureType").value;
+
+ let amount =
+ Number(
+  $("feeStructureAmount").value
+ );
+
+ if(!amount || amount < 0){
+
+  alert("Enter valid amount.");
+
+  return;
+ }
+
+
+ let existing =
+ db.feeStructures.find(x =>
+
+  x.className === className &&
+  x.type === type
+
+ );
+
+
+ let fee;
+
+
+ if(existing){
+
+  existing.amount = amount;
+
+  existing.frequency =
+   $("feeFrequency").value;
+
+  fee = existing;
+
+ }else{
+
+  fee = {
+
+   id:"FS-" + Date.now(),
+
+   className,
+
+   type,
+
+   amount,
+
+   frequency:
+    $("feeFrequency").value
+
+  };
+
+ }
+
+
+ /* SAVE TO SQLITE */
+
+ try{
+
+  let response =
+   await window.schoolAPI
+   .saveFeeStructure(fee);
+
+
+  if(
+   !response ||
+   response.success !== true
+  ){
+
+   alert(
+    "Fee structure could not be saved."
+   );
+
+   return;
+
+  }
+
+
+  /*
+   Only add after successful
+   SQLite save.
+  */
+
+  if(!existing){
+
+   db.feeStructures.push(fee);
+
+  }
+
+
+  $("feeStructureAmount").value = "";
+
+
+  /*
+   Temporary local backup.
+  */
+
+  saveDB();
+
+
+ }catch(error){
+
+  console.error(
+   "Fee Structure Save Error:",
+   error
+  );
+
+  alert(
+   "Fee structure could not be saved."
+  );
+
+ }
+
+}
+
+async function deleteFeeStructure(id){
+
+ if(
+  !(await showConfirm("Delete fee structure?"))
+ ){
+  return;
+ }
+
+
+ try{
+
+  let response =
+   await window.schoolAPI
+   .deleteFeeStructure(id);
+
+
+  if(
+   !response ||
+   response.success !== true
+  ){
+
+   alert(
+    "Fee structure could not be deleted."
+   );
+
+   return;
+
+  }
+
+
+  db.feeStructures =
+   db.feeStructures.filter(
+    x => x.id !== id
+   );
+
+
+  /*
+   Temporary local backup.
+  */
+
+  saveDB();
+
+
+ }catch(error){
+
+  console.error(
+   "Fee Structure Delete Error:",
+   error
+  );
+
+  alert(
+   "Fee structure could not be deleted."
+  );
+
+ }
+
+}
+
+
+
+/* =====================================================
+   LICENSE INFORMATION
+===================================================== */
+
+async function renderLicenseInformation(){
+ try{
+  if(!window.schoolAPI?.getLicenseStatus) return;
+  const status = await window.schoolAPI.getLicenseStatus();
+  const lic = status?.license || {};
+  if($("licenseLicensedTo")) $("licenseLicensedTo").innerText = lic.customerName || db.school?.name || "-";
+  if($("licenseIdDisplay")) $("licenseIdDisplay").innerText = lic.licenseId || "-";
+  if($("licenseMachineCode")) $("licenseMachineCode").innerText = status?.machineCode || "-";
+  if($("licenseTypeDisplay")) $("licenseTypeDisplay").innerText = lic.expiresAt ? "Expiring" : "Lifetime";
+  if($("licenseExpiryDisplay")) $("licenseExpiryDisplay").innerText = lic.expiresAt || "Never";
+  if($("licenseStatusDisplay")){
+   $("licenseStatusDisplay").innerText = status?.valid ? "Active" : "Invalid";
+  }
+ }catch(error){
+  console.error("License Information Error:", error);
+  if($("licenseStatusDisplay")) $("licenseStatusDisplay").innerText = "Unavailable";
+ }
+}
+
+async function deactivateCurrentLicense(){
+ const ok = await showConfirm(
+  "Deactivate this software license on this computer?\n\nSchool database and records will NOT be deleted. You will need a valid license to use the software again."
+ );
+ if(!ok) return;
+ try{
+  if(!window.schoolAPI?.deactivateLicense){
+   alert("License service is not available.");
+   return;
+  }
+  const result = await window.schoolAPI.deactivateLicense();
+  if(!result?.success){
+   alert(result?.message || "License could not be deactivated.");
+  }
+ }catch(error){
+  console.error("License Deactivation Error:", error);
+  alert("License could not be deactivated.");
+ }
+}
+
+/* =====================================================
+ ADMIN
+===================================================== */
+
+async function saveSchoolSettings(){
+
+ let school = {
+
+  name:
+   $("schoolName").value.trim(),
+
+  subtitle:
+   $("schoolSubtitle").value.trim(),
+
+  address:
+   $("schoolAddress").value.trim(),
+
+  phone:
+   $("schoolPhone").value.trim(),
+
+  email:
+   $("schoolEmail").value.trim(),
+
+  udise:
+   $("schoolUdise").value.trim(),
+
+  session:
+   $("schoolSession").value.trim()
+
+ };
+
+
+ /* BASIC VALIDATION */
+
+ if(!school.name){
+
+  alert(
+   "Please enter School Name."
+  );
+
+  return;
+
+ }
+
+
+ if(!school.session){
+
+  alert(
+   "Please enter Academic Session."
+  );
+
+  return;
+
+ }
+
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.saveSetting
+  ){
+
+   console.error(
+    "SQLite Settings API not available."
+   );
+
+   alert(
+    "School settings database is not available."
+   );
+
+   return;
+
+  }
+
+
+  /* SAVE PERMANENTLY TO SQLITE */
+
+  let response =
+   await window.schoolAPI.saveSetting(
+    "school",
+    school
+   );
+
+
+  if(
+   !response ||
+   response.success !== true
+  ){
+
+   console.error(
+    "School Settings Save Failed:",
+    response
+   );
+
+   alert(
+    response?.message ||
+    "School settings could not be saved."
+   );
+
+   return;
+
+  }
+
+
+  /*
+   SQLite successful hone ke baad
+   frontend state update karo.
+  */
+
+  db.school = school;
+
+
+  /*
+   Temporary localStorage compatibility.
+   Abhi remove nahi karenge.
+  */
+
+  saveDB();
+
+
+  alert(
+   "School settings saved successfully."
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "School Settings Save Error:",
+   error
+  );
+
+  alert(
+   "School settings could not be saved."
+  );
+
+ }
+
+}
+
+async function addMaster(type, inputId){
+
+ let value =
+  $(inputId).value.trim();
+
+
+ if(!value){
+
+  alert("Please enter a value.");
+  return;
+
+ }
+
+
+ let exists =
+  db[type].some(
+   x =>
+    String(x).toLowerCase() ===
+    value.toLowerCase()
+  );
+
+
+ if(exists){
+
+  alert("This item already exists.");
+  return;
+
+ }
+
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.addMasterData
+  ){
+
+   console.error(
+    "SQLite Master Data API not available."
+   );
+
+   alert(
+    "Master database is not available."
+   );
+
+   return;
+
+  }
+
+
+  let response =
+   await window.schoolAPI
+   .addMasterData(
+    type,
+    value
+   );
+
+
+  if(
+   !response ||
+   response.success !== true
+  ){
+
+   alert(
+    response?.message ||
+    "Item could not be saved."
+   );
+
+   return;
+
+  }
+
+
+  /*
+   SQLite save successful hone ke
+   baad frontend data update karo.
+  */
+
+  db[type].push(value);
+
+
+  $(inputId).value = "";
+
+
+  /*
+   Temporary localStorage compatibility
+  */
+
+  saveDB();
+
+
+  renderMasterData();
+
+
+  alert(
+   "Item added successfully."
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "Master Data Add Error:",
+   error
+  );
+
+  alert(
+   "Item could not be saved."
+  );
+
+ }
+
+}
+
+
+/* DELETE MASTER DATA */
+
+async function deleteMaster(type, value){
+
+ let label = {
+
+  classes: "Class",
+  sections: "Section",
+  subjects: "Subject",
+  feeTypes: "Fee Type"
+
+ }[type] || "Item";
+
+
+ if(
+  !(await showConfirm(
+   `Delete ${label} "${value}"?`
+  ))
+ ){
+  return;
+ }
+
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.deleteMasterData
+  ){
+
+   console.error(
+    "SQLite Master Data API not available."
+   );
+
+   alert(
+    "Master database is not available."
+   );
+
+   return;
+
+  }
+
+
+  let response =
+   await window.schoolAPI
+   .deleteMasterData(
+    type,
+    value
+   );
+
+
+  if(
+   !response ||
+   response.success !== true
+  ){
+
+   alert(
+    response?.message ||
+    "Item could not be deleted."
+   );
+
+   return;
+
+  }
+
+
+  /*
+   SQLite delete successful.
+   Ab frontend db update karo.
+  */
+
+  db[type] =
+   db[type].filter(
+    x => x !== value
+   );
+
+
+  /*
+   Class delete hone par existing
+   class subject configuration remove.
+  */
+
+  if(type === "classes"){
+
+   if(db.classSubjects[value]){
+
+    delete db.classSubjects[value];
+
+   }
+
+  }
+
+
+  /*
+   Subject delete hone par frontend ki
+   classSubjects configurations se bhi
+   subject remove karo.
+
+   SQLite backend me bhi ye cleanup
+   already ho raha hai.
+  */
+
+  if(type === "subjects"){
+
+   for(
+    let className
+    in db.classSubjects
+   ){
+
+    db.classSubjects[className] =
+     db.classSubjects[className]
+     .filter(
+      subject =>
+       subject !== value
+     );
+
+   }
+
+  }
+
+
+  /*
+   Temporary localStorage compatibility
+  */
+
+  saveDB();
+
+
+  renderMasterData();
+
+
+ }catch(error){
+
+  console.error(
+   "Master Data Delete Error:",
+   error
+  );
+
+  alert(
+   "Item could not be deleted."
+  );
+
+ }
+
+}
+
+
+/* DISPLAY MASTER DATA */
+
+function renderMasterData(){
+
+ let makeList=(type)=>{
+
+  return (db[type]||[]).map(item=>`
+
+   <div style="
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:6px 8px;
+    margin-bottom:5px;
+    border:1px solid #e5e7eb;
+    border-radius:6px;
+   ">
+
+    <span>
+     ${escapeHTML(item)}
+    </span>
+
+    <button
+     type="button"
+     class="btn red small"
+     onclick='deleteMaster(
+      ${JSON.stringify(type)},
+      ${JSON.stringify(item)}
+     )'>
+     Delete
+    </button>
+
+   </div>
+
+  `).join("");
+
+ };
+
+
+ $("masterClassList").innerHTML=
+ makeList("classes");
+
+ $("masterSectionList").innerHTML=
+ makeList("sections");
+
+ $("masterSubjectList").innerHTML=
+ makeList("subjects");
+
+ $("masterFeeTypeList").innerHTML=
+ makeList("feeTypes");
+
+}
+
+function changePassword(){
+
+ if(
+  $("oldPassword").value!==
+  db.security.password
+ ){
+
+  alert(
+   "Current password is incorrect."
+  );
+
+  return;
+ }
+
+ let password=
+ $("newPassword").value;
+
+ if(password.length<6){
+
+  alert(
+   "Password must be at least 6 characters."
+  );
+
+  return;
+ }
+
+ db.security.password=password;
+
+ $("oldPassword").value="";
+ $("newPassword").value="";
+
+ saveDB();
+
+ alert("Password changed.");
+}
+
+
+/* =====================================================
+ PRINT ENGINE
+===================================================== */
+
+async function printDocument(html){
+
+ try{
+
+  if(
+   !window.schoolAPI ||
+   !window.schoolAPI.printDocument
+  ){
+
+   alert(
+    "Print service is not available."
+   );
+
+   return;
+  }
+
+
+  let result=
+  await window.schoolAPI.printDocument(html);
+
+
+  if(!result || !result.success){
+
+   if(
+    result?.message &&
+    !String(result.message)
+      .toLowerCase()
+      .includes("cancel")
+   ){
+
+    alert(
+     "Print Error:\n"+
+     result.message
+    );
+
+   }
+
+  }
+
+
+ }catch(error){
+
+  console.error(
+   "Print Error:",
+   error
+  );
+
+  alert(
+   "Print Error:\n"+
+   error.message
+  );
+
+ }
+
+}
+
+function schoolHeader(compact=false){
+
+ return`
+
+ <div style="
+  text-align:center;
+  margin-bottom:${compact ? "3px" : "8px"};
+ ">
+
+  <div style="
+   display:flex;
+   justify-content:space-between;
+   font-size:${compact ? "8px" : "11px"};
+   font-weight:bold;
+  ">
+
+   <span>
+    UDISE CODE :
+    ${escapeHTML(db.school.udise||"")}
+   </span>
+
+   <span>
+    Mob.:
+    ${escapeHTML(db.school.phone||"")}
+   </span>
+
+  </div>
+
+  <h1 style="
+   margin:${compact ? "1px" : "5px"} 0 1px;
+   font-size:${compact ? "20px" : "27px"};
+   color:#172554;
+  ">
+   ${escapeHTML(db.school.name)}
+  </h1>
+
+  <div style="
+   font-size:${compact ? "8px" : "12px"};
+  ">
+   ${escapeHTML(db.school.subtitle||"")}
+  </div>
+
+  <div style="
+   display:inline-block;
+   border:1px solid #333;
+   border-radius:4px;
+   padding:${compact ? "1px 8px" : "3px 12px"};
+   margin-top:${compact ? "1px" : "5px"};
+   font-size:${compact ? "8px" : "11px"};
+   font-weight:bold;
+  ">
+   ${escapeHTML(db.school.address||"")}
+  </div>
+
+ </div>
+
+ `;
+}
+
+
+/* =====================================================
+ FEE RECEIPT - A4
+===================================================== */
+
+function printReceipt(paymentId){
+
+ let p=
+ db.payments.find(
+  x=>x.id===paymentId
+ );
+
+ if(!p)return;
+
+ let s=
+ db.students.find(
+  x=>x.id===p.studentId
+ );
+
+ if(!s)return;
+
+ let calc=
+ studentFeeCalculation(s);
+
+ let structure=
+ classFeeRows(s.className);
+
+ let studentPayments=
+ db.payments.filter(
+  x=>x.studentId===s.id
+ );
+
+ let typePaid={};
+
+ studentPayments.forEach(x=>{
+
+  typePaid[x.feeType]=
+  (typePaid[x.feeType]||0)
+  +
+  Number(x.amount||0);
+
+ });
+
+ let structureHTML=
+ structure.map(f=>`
+
+ <div style="margin:5px 0">
+
+  ${escapeHTML(f.type)}:
+
+  <b>${money(f.amount)}</b>
+
+  ${
+   f.frequency==="monthly"
+   ? " / month"
+   : ""
+  }
+
+ </div>
+
+ `).join("");
+
+ let dueHTML=
+ structure.map(f=>{
+
+  let total=
+  f.frequency==="monthly"
+  ? Number(f.amount)*12
+  : Number(f.amount);
+
+  let paid=
+  typePaid[f.type]||0;
+
+  return`
+
+  <div style="margin:5px 0">
+
+   ${escapeHTML(f.type)} Due:
+
+   <b>
+    ${money(
+     Math.max(0,total-paid)
+    )}
+   </b>
+
+  </div>
+
+  `;
+
+ }).join("");
+
+ let html=`
+
+ <div style="
+  width:196mm;
+  min-height:280mm;
+  margin:auto;
+  padding:5mm;
+  font-family:Arial;
+  color:#222;
+ ">
+
+ ${schoolHeader()}
+
+ <div style="
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  margin:10px 0;
+ ">
+  SCHOOL COPY
+ </div>
+
+ <hr>
+
+ <div style="
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+  font-size:13px;
+  line-height:1.8;
+ ">
+
+  <div>
+
+   <b>Receipt No:</b>
+   ${escapeHTML(p.receipt)}
+   <br>
+
+   <b>Date:</b>
+   ${escapeHTML(p.date)}
+   <br>
+
+   <b>Time:</b>
+   ${escapeHTML(p.time)}
+   <br>
+
+   <b>Student Name:</b>
+   ${escapeHTML(s.name)}
+   <br>
+
+   <b>Father's Name:</b>
+   ${escapeHTML(s.father)}
+   <br>
+
+   <b>Phone:</b>
+   ${escapeHTML(s.phone||"N/A")}
+
+  </div>
+
+  <div>
+
+   <b>Class:</b>
+   ${escapeHTML(s.className)}
+   -
+   Section
+   ${escapeHTML(s.section)}
+   <br>
+
+   <b>Roll No:</b>
+   ${escapeHTML(s.roll)}
+   <br>
+
+   <b>SR No:</b>
+   ${escapeHTML(s.admission||"N/A")}
+   <br>
+
+   <b>Session:</b>
+   ${escapeHTML(db.school.session)}
+   <br>
+
+   <b>Admission Date:</b>
+   ${escapeHTML(s.admissionDate||"N/A")}
+   <br>
+
+   <b>Transport Route:</b>
+   ${escapeHTML(s.transportRoute||"N/A")}
+
+  </div>
+
+ </div>
+
+ <hr style="margin:15px 0">
+
+ <h2 style="
+  text-align:center;
+  font-size:18px;
+ ">
+  FEE STRUCTURE & DUES
+ </h2>
+
+ <div style="
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:20px;
+  font-size:12px;
+  min-height:85mm;
+ ">
+
+  <div>
+
+   <h3>Fee Structure</h3>
+
+   ${structureHTML}
+
+   <br>
+
+   <b>Gross Fee:</b>
+   ${money(calc.gross)}
+
+  </div>
+
+  <div>
+
+   <h3>Current Dues</h3>
+
+   ${dueHTML}
+
+   <hr>
+
+   <b>Concession:</b>
+   ${money(calc.concession)}
+
+   <br><br>
+
+   <b>Reason:</b>
+   ${escapeHTML(
+    s.concessionReason||
+    "No Concession"
+   )}
+
+   ${
+    s.concessionRemarks
+    ? `
+    <br><br>
+    <b>Remarks:</b>
+    ${escapeHTML(
+     s.concessionRemarks
+    )}
+    `
+    : ""
+   }
+
+  </div>
+
+  <div>
+
+   <h3>Payment Details</h3>
+
+   <div style="font-size:18px">
+
+    <b>Amount Paid:</b>
+
+    <br>
+
+    ${money(p.amount)}
+
+   </div>
+
+   <br>
+
+   <b>Payment Mode:</b>
+   ${escapeHTML(p.mode)}
+
+   <br><br>
+
+   <b>Payment Allocation:</b>
+
+   <br>
+
+   ${escapeHTML(p.feeType)}
+   :
+   ${money(p.amount)}
+
+   <br><br>
+
+   <b>Payment Note:</b>
+
+   <br>
+
+   ${escapeHTML(
+    p.note||"No note"
+   )}
+
+  </div>
+
+ </div>
+
+ <hr>
+
+ <table style="
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+ ">
+
+  <tr>
+   <th>Gross Fee</th>
+   <th>Concession</th>
+   <th>Net Payable</th>
+   <th>Total Paid</th>
+   <th>Remaining Due</th>
+  </tr>
+
+  <tr>
+   <td>${money(calc.gross)}</td>
+   <td>${money(calc.concession)}</td>
+   <td>${money(calc.total)}</td>
+   <td>${money(calc.paid)}</td>
+   <td>${money(calc.due)}</td>
+  </tr>
+
+ </table>
+
+ <div style="
+  text-align:center;
+  margin-top:25px;
+  font-size:13px;
+ ">
+
+  <b>
+   Thank you for your payment!
+  </b>
+
+  <br><br>
+
+  This is a computer generated receipt.
+  No signature required.
+
+  <br>
+
+  For any queries, please contact the school office.
+
+ </div>
+
+ </div>
+
+ `;
+
+ printDocument(html);
+}
+
+
+/* =====================================================
+ RESULT CALCULATIONS
+===================================================== */
+
+function resultTotals(result){
+
+ let qMax=0;
+ let qObt=0;
+
+ let hMax=0;
+ let hObt=0;
+
+ let aMax=0;
+ let aObt=0;
+
+ result.subjects.forEach(x=>{
+
+  qMax+=
+  Number(x.quarterly.max)||0;
+
+  qObt+=
+  Number(x.quarterly.obtained)||0;
+
+  hMax+=
+  Number(x.halfYearly.max)||0;
+
+  hObt+=
+  Number(x.halfYearly.obtained)||0;
+
+  aMax+=
+  Number(x.annual.max)||0;
+
+  aObt+=
+  Number(x.annual.obtained)||0;
+
+ });
+
+ let max=
+ qMax+hMax+aMax;
+
+ let obtained=
+ qObt+hObt+aObt;
+
+ return{
+
+  qMax,
+  qObt,
+
+  hMax,
+  hObt,
+
+  aMax,
+  aObt,
+
+  max,
+  obtained,
+
+  percentage:
+  max
+  ? (obtained/max*100).toFixed(2)
+  : "0.00"
+
+ };
+}
+
+function gradeFromPercentage(p){
+
+ p=Number(p);
+
+ if(p>=91)return"A1";
+ if(p>=81)return"A2";
+ if(p>=71)return"B1";
+ if(p>=61)return"B2";
+ if(p>=51)return"C1";
+ if(p>=41)return"C2";
+ if(p>=33)return"D";
+
+ return"E";
+}
+
+
+/* =====================================================
+ COMPACT A4 RESULT
+===================================================== */
+
+function buildReportCardHTML(s,r){
+
+ let totals=
+ resultTotals(r);
+
+ let subjectRows=
+ r.subjects.map(x=>{
+
+  let grandMax=
+  Number(x.quarterly.max||0)
+  +
+  Number(x.halfYearly.max||0)
+  +
+  Number(x.annual.max||0);
+
+  let grandObt=
+  Number(x.quarterly.obtained||0)
+  +
+  Number(x.halfYearly.obtained||0)
+  +
+  Number(x.annual.obtained||0);
+
+  return`
+
+  <tr>
+
+   <td>
+    ${escapeHTML(x.subject)}
+   </td>
+
+   <td>${x.quarterly.max}</td>
+   <td>${x.quarterly.obtained}</td>
+
+   <td>${x.halfYearly.max}</td>
+   <td>${x.halfYearly.obtained}</td>
+
+   <td>${x.annual.max}</td>
+   <td>${x.annual.obtained}</td>
+
+   <td>${grandMax}</td>
+   <td>${grandObt}</td>
+
+  </tr>
+
+  `;
+
+ }).join("");
+
+ let resultText=
+ Number(totals.percentage)>=33
+ ? "PASS"
+ : "FAIL";
+
+ let grade=
+ gradeFromPercentage(
+  totals.percentage
+ );
+
+ return`
+
+ <div
+ class="result-a4"
+ style="
+  width:202mm;
+  height:288mm;
+  margin:0 auto;
+  padding:6mm 7mm;
+  font-family:Arial,Helvetica,sans-serif;
+  color:#1f2937;
+  background:#ffffff;
+  box-sizing:border-box;
+  position:relative;
+  overflow:hidden;
+  page-break-after:always;
+ "
+>
+
+<style>
+
+.result-a4 *{
+ box-sizing:border-box;
+}
+
+.result-a4 table{
+ border-collapse:collapse;
+}
+
+.result-a4 .report-table{
+ width:100%;
+}
+
+.result-a4 .report-table th,
+.result-a4 .report-table td{
+ border:1px solid #64748b;
+ padding:5px 6px;
+ line-height:1.25;
+}
+
+.result-a4 .report-table th{
+ background:#f1f5f9;
+ font-weight:700;
+}
+
+.result-a4 .section-title{
+ font-size:12px;
+ font-weight:700;
+ padding:5px 7px;
+ margin:7px 0 4px;
+ border-left:4px solid #172554;
+ background:#f8fafc;
+ color:#172554;
+}
+
+</style>
+
+
+<!-- =========================================
+     SCHOOL HEADER
+========================================= -->
+
+<div style="
+ text-align:center;
+ border-bottom:2px solid #172554;
+ padding-bottom:5px;
+ margin-bottom:5px;
+">
+
+ <div style="
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:9px;
+  font-weight:600;
+  margin-bottom:2px;
+ ">
+
+  <span>
+   UDISE:
+   ${escapeHTML(db.school.udise || "-")}
+  </span>
+
+  <span>
+   Mob:
+   ${escapeHTML(db.school.phone || "-")}
+  </span>
+
+ </div>
+
+
+ <div style="
+  font-size:22px;
+  line-height:1.15;
+  font-weight:700;
+  color:#172554;
+  letter-spacing:.3px;
+ ">
+  ${escapeHTML(db.school.name || "")}
+ </div>
+
+
+ <div style="
+  font-size:9px;
+  margin-top:2px;
+  color:#475569;
+ ">
+  ${escapeHTML(db.school.subtitle || "")}
+ </div>
+
+
+ <div style="
+  font-size:9px;
+  margin-top:3px;
+  font-weight:600;
+ ">
+  ${escapeHTML(db.school.address || "")}
+ </div>
+
+</div>
+
+
+<!-- =========================================
+     REPORT TITLE
+========================================= -->
+
+<div style="
+ text-align:center;
+ margin:6px 0 7px;
+">
+
+ <div style="
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:.8px;
+  color:#172554;
+ ">
+  PROGRESS REPORT
+ </div>
+
+ <div style="
+  font-size:10px;
+  margin-top:2px;
+  font-weight:600;
+ ">
+  SESSION:
+  ${escapeHTML(db.school.session || "-")}
+ </div>
+
+</div>
+
+
+<!-- =========================================
+     STUDENT DETAILS
+========================================= -->
+
+<table
+ class="report-table"
+ style="
+  font-size:10px;
+  margin-bottom:5px;
+ "
+>
+
+ <tr>
+
+  <td style="width:16%;">
+   <b>Student Name</b>
+  </td>
+
+  <td style="width:34%;">
+   ${escapeHTML(s.name || "-")}
+  </td>
+
+  <td style="width:14%;">
+   <b>Class</b>
+  </td>
+
+  <td style="width:14%;">
+   ${escapeHTML(s.className || "-")}
+   -
+   ${escapeHTML(s.section || "-")}
+  </td>
+
+  <td style="width:10%;">
+   <b>Roll No.</b>
+  </td>
+
+  <td style="width:12%;">
+   ${escapeHTML(s.roll || "-")}
+  </td>
+
+ </tr>
+
+
+ <tr>
+
+  <td>
+   <b>Father's Name</b>
+  </td>
+
+  <td>
+   ${escapeHTML(s.father || "-")}
+  </td>
+
+  <td>
+   <b>SR No.</b>
+  </td>
+
+  <td>
+   ${escapeHTML(s.admission || "-")}
+  </td>
+
+  <td>
+   <b>D.O.B.</b>
+  </td>
+
+  <td>
+   ${escapeHTML(s.dob || "-")}
+  </td>
+
+ </tr>
+
+
+ <tr>
+
+  <td>
+   <b>Mother's Name</b>
+  </td>
+
+  <td colspan="5">
+   ${escapeHTML(s.mother || "-")}
+  </td>
+
+ </tr>
+
+</table>
+
+
+<!-- =========================================
+     PART A
+========================================= -->
+
+<div class="section-title">
+ PART-A &nbsp; ACADEMIC PERFORMANCE
+</div>
+
+
+<table
+ class="report-table"
+ style="
+  font-size:9.5px;
+  text-align:center;
+ "
+>
+
+ <thead>
+
+  <tr>
+
+   <th rowspan="2" style="width:20%;">
+    SUBJECT
+   </th>
+
+   <th colspan="2">
+    Quarterly
+   </th>
+
+   <th colspan="2">
+    Half Yearly
+   </th>
+
+   <th colspan="2">
+    Annual
+   </th>
+
+   <th colspan="2">
+    Grand Total
+   </th>
+
+  </tr>
+
+
+  <tr>
+
+   <th>Max.</th>
+   <th>Obt.</th>
+
+   <th>Max.</th>
+   <th>Obt.</th>
+
+   <th>Max.</th>
+   <th>Obt.</th>
+
+   <th>Max.</th>
+   <th>Obt.</th>
+
+  </tr>
+
+ </thead>
+
+
+ <tbody>
+
+  ${subjectRows}
+
+
+  <tr style="
+   font-weight:700;
+   background:#f8fafc;
+  ">
+
+   <td style="text-align:left;">
+    TOTAL
+   </td>
+
+   <td>${totals.qMax}</td>
+   <td>${totals.qObt}</td>
+
+   <td>${totals.hMax}</td>
+   <td>${totals.hObt}</td>
+
+   <td>${totals.aMax}</td>
+   <td>${totals.aObt}</td>
+
+   <td>${totals.max}</td>
+   <td>${totals.obtained}</td>
+
+  </tr>
+
+ </tbody>
+
+</table>
+
+
+<!-- =========================================
+     RESULT SUMMARY
+========================================= -->
+
+<div style="
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ border:1px solid #64748b;
+ border-top:0;
+ text-align:center;
+ font-size:10px;
+">
+
+ <div style="
+  padding:6px;
+  border-right:1px solid #64748b;
+ ">
+
+  <div style="
+   font-size:8px;
+   color:#64748b;
+   margin-bottom:2px;
+  ">
+   PERCENTAGE
+  </div>
+
+  <b style="font-size:12px;">
+   ${totals.percentage}%
+  </b>
+
+ </div>
+
+
+ <div style="
+  padding:6px;
+  border-right:1px solid #64748b;
+ ">
+
+  <div style="
+   font-size:8px;
+   color:#64748b;
+   margin-bottom:2px;
+  ">
+   GRADE
+  </div>
+
+  <b style="font-size:12px;">
+   ${grade}
+  </b>
+
+ </div>
+
+
+ <div style="
+  padding:6px;
+  border-right:1px solid #64748b;
+ ">
+
+  <div style="
+   font-size:8px;
+   color:#64748b;
+   margin-bottom:2px;
+  ">
+   RESULT
+  </div>
+
+  <b style="font-size:12px;">
+   ${resultText}
+  </b>
+
+ </div>
+
+
+ <div style="
+  padding:6px;
+ ">
+
+  <div style="
+   font-size:8px;
+   color:#64748b;
+   margin-bottom:2px;
+  ">
+   PROMOTED TO
+  </div>
+
+  <b style="font-size:12px;">
+   ${escapeHTML(r.promotedTo || "-")}
+  </b>
+
+ </div>
+
+</div>
+
+
+<!-- =========================================
+     ATTENDANCE
+========================================= -->
+
+<div style="
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:6px;
+ margin-top:6px;
+">
+
+ <div style="
+  border:1px solid #cbd5e1;
+  border-radius:3px;
+  padding:6px 8px;
+  font-size:10px;
+ ">
+
+  <b>Working Days:</b>
+
+  <span style="
+   float:right;
+   font-weight:700;
+  ">
+   ${r.workingDays || 0}
+  </span>
+
+ </div>
+
+
+ <div style="
+  border:1px solid #cbd5e1;
+  border-radius:3px;
+  padding:6px 8px;
+  font-size:10px;
+ ">
+
+  <b>Days Present:</b>
+
+  <span style="
+   float:right;
+   font-weight:700;
+  ">
+   ${r.attendanceDays || 0}
+  </span>
+
+ </div>
+
+</div>
+
+
+<!-- =========================================
+     PART B
+========================================= -->
+
+<div class="section-title">
+ PART-B &nbsp; ACTIVITY PERFORMANCE
+</div>
+
+
+<table
+ class="report-table"
+ style="
+  width:60%;
+  font-size:10px;
+ "
+>
+
+ <tr>
+
+  <th style="width:70%;">
+   Activity
+  </th>
+
+  <th style="width:30%;">
+   Grade
+  </th>
+
+ </tr>
+
+
+ <tr>
+  <td>Computer</td>
+  <td style="text-align:center;">
+   ${escapeHTML(r.activities?.computer || "-")}
+  </td>
+ </tr>
+
+
+ <tr>
+  <td>Project</td>
+  <td style="text-align:center;">
+   ${escapeHTML(r.activities?.project || "-")}
+  </td>
+ </tr>
+
+
+ <tr>
+  <td>Physical Education</td>
+  <td style="text-align:center;">
+   ${escapeHTML(r.activities?.physical || "-")}
+  </td>
+ </tr>
+
+
+ <tr>
+  <td>Uniform</td>
+  <td style="text-align:center;">
+   ${escapeHTML(r.activities?.uniform || "-")}
+  </td>
+ </tr>
+
+
+ <tr>
+  <td>Discipline</td>
+  <td style="text-align:center;">
+   ${escapeHTML(r.activities?.discipline || "-")}
+  </td>
+ </tr>
+
+</table>
+
+
+<!-- =========================================
+     REMARKS
+========================================= -->
+
+<div style="
+ margin-top:7px;
+ border:1px solid #cbd5e1;
+ border-radius:3px;
+ padding:7px 8px;
+ min-height:17mm;
+ font-size:10px;
+">
+
+ <div style="
+  font-weight:700;
+  color:#172554;
+  margin-bottom:4px;
+ ">
+  REMARKS
+ </div>
+
+ ${escapeHTML(r.remarks || "-")}
+
+</div>
+
+
+<!-- =========================================
+     SESSION INFORMATION
+========================================= -->
+
+<div style="
+ margin-top:6px;
+ font-size:9.5px;
+ line-height:1.6;
+">
+
+ <div>
+
+  <b>
+   Promoted To:
+  </b>
+
+  ${escapeHTML(r.promotedTo || "-")}
+
+ </div>
+
+
+ <div>
+
+  <b>
+   Next Session Starts On:
+  </b>
+
+  ${escapeHTML(r.nextSessionDate || "-")}
+
+ </div>
+
+</div>
+
+
+<!-- =========================================
+     SIGNATURES
+========================================= -->
+
+<div style="
+ position:absolute;
+ left:7mm;
+ right:7mm;
+ bottom:9mm;
+">
+
+ <div style="
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  text-align:center;
+  font-size:9.5px;
+ ">
+
+
+  <div style="width:28%;">
+
+   <div style="
+    border-top:1px solid #334155;
+    padding-top:4px;
+   ">
+    Class Teacher
+   </div>
+
+  </div>
+
+
+  <div style="width:28%;">
+
+   <div style="
+    border-top:1px solid #334155;
+    padding-top:4px;
+   ">
+    Checker
+   </div>
+
+  </div>
+
+
+  <div style="width:28%;">
+
+   <div style="
+    border-top:1px solid #334155;
+    padding-top:4px;
+    font-weight:700;
+   ">
+    Principal
+   </div>
+
+  </div>
+
+
+ </div>
+
+</div>
+
+
+</div>
+
+ `;
+}
+
+function printReportCard(){
+
+ let s=currentStudent();
+
+ if(!s)return;
+
+ let r=
+ db.results.find(
+  x=>x.studentId===s.id
+ );
+
+ if(!r){
+
+  alert("No result found.");
+
+  return;
+ }
+
+ printDocument(
+  buildReportCardHTML(s,r)
+ );
+}
+
+function buildResultPreview(s,r){
+
+ let t=
+ resultTotals(r);
+
+ return`
+
+ <div class="student-fee-summary">
+
+  <div>
+   <small>Total Maximum</small>
+   <strong>${t.max}</strong>
+  </div>
+
+  <div class="paid">
+   <small>Total Obtained</small>
+   <strong>${t.obtained}</strong>
+  </div>
+
+  <div>
+   <small>Percentage</small>
+   <strong>${t.percentage}%</strong>
+  </div>
+
+  <div>
+   <small>Grade</small>
+   <strong>
+    ${gradeFromPercentage(t.percentage)}
+   </strong>
+  </div>
+
+  <div>
+   <small>Result</small>
+   <strong>
+    ${
+     Number(t.percentage)>=33
+     ? "PASS"
+     : "FAIL"
+    }
+   </strong>
+  </div>
+
+ </div>
+
+ `;
+}
+
+
+/* =====================================================
+ INDIVIDUAL PDF REPORTS
+===================================================== */
+
+function printFeeStatement(){
+
+ let s=currentStudent();
+
+ if(!s)return;
+
+ let calc=
+ studentFeeCalculation(s);
+
+ let payments=
+ db.payments.filter(
+  p=>p.studentId===s.id
+ );
+
+ let html=`
+
+ <div style="
+  width:196mm;
+  margin:auto;
+  font-family:Arial;
+ ">
+
+ ${schoolHeader()}
+
+ <h2 style="text-align:center">
+  STUDENT FEE STATEMENT
+ </h2>
+
+ <p>
+
+  <b>Student:</b>
+  ${escapeHTML(s.name)}
+
+  &nbsp;&nbsp;
+
+  <b>Father:</b>
+  ${escapeHTML(s.father)}
+
+  &nbsp;&nbsp;
+
+  <b>Roll:</b>
+  ${escapeHTML(s.roll)}
+
+  <br>
+
+  <b>Class:</b>
+  ${escapeHTML(s.className)}
+  -
+  ${escapeHTML(s.section)}
+
+  &nbsp;&nbsp;
+
+  <b>Student ID:</b>
+  ${escapeHTML(s.id)}
+
+ </p>
+
+ ${
+  htmlTable(
+   [
+    "Gross Fee",
+    "Concession",
+    "Net Payable",
+    "Paid",
+    "Due"
+   ],
+   [[
+    money(calc.gross),
+    money(calc.concession),
+    money(calc.total),
+    money(calc.paid),
+    money(calc.due)
+   ]]
+  )
+ }
+
+ <p>
+
+  <b>Concession Reason:</b>
+
+  ${escapeHTML(
+   s.concessionReason||
+   "No Concession"
+  )}
+
+  ${
+   s.concessionRemarks
+   ? `
+   <br>
+   <b>Concession Remarks:</b>
+   ${escapeHTML(
+    s.concessionRemarks
+   )}
+   `
+   : ""
+  }
+
+ </p>
+
+ <h3>Payment History</h3>
+
+ ${
+  htmlTable(
+   [
+    "Receipt",
+    "Date",
+    "Fee Type",
+    "Month",
+    "Amount",
+    "Mode"
+   ],
+
+   payments.map(p=>[
+    p.receipt,
+    p.date,
+    p.feeType,
+    p.month||"-",
+    money(p.amount),
+    p.mode
+   ])
+  )
+ }
+
+ </div>
+
+ `;
+
+ printDocument(html);
+}
+
+function printAttendanceStatement(){
+
+ let s=currentStudent();
+
+ if(!s)return;
+
+ let a=
+ db.attendance.filter(
+  x=>x.studentId===s.id
+ );
+
+ printDocument(`
+
+ <div style="
+  width:196mm;
+  margin:auto;
+  font-family:Arial;
+ ">
+
+ ${schoolHeader()}
+
+ <h2 style="text-align:center">
+  ATTENDANCE REPORT
+ </h2>
+
+ <p>
+
+  <b>${escapeHTML(s.name)}</b>
+
+  | Father:
+  ${escapeHTML(s.father)}
+
+  | Roll:
+  ${escapeHTML(s.roll)}
+
+  | ${escapeHTML(s.className)}
+  -
+  ${escapeHTML(s.section)}
+
+ </p>
+
+ ${
+  htmlTable(
+   ["Date","Status"],
+   a.map(x=>[
+    x.date,
+    x.status
+   ])
+  )
+ }
+
+ </div>
+
+ `);
+}
+
+function printStudentComplete(){
+
+ let s=currentStudent();
+
+ if(!s)return;
+
+ let f=
+ studentFeeCalculation(s);
+
+ printDocument(`
+
+ <div style="
+  width:196mm;
+  margin:auto;
+  font-family:Arial;
+ ">
+
+ ${schoolHeader()}
+
+ <h2 style="text-align:center">
+  COMPLETE STUDENT RECORD
+ </h2>
+
+ ${
+  htmlTable(
+   ["Field","Details"],
+   [
+    ["Student ID",s.id],
+    ["Name",s.name],
+    ["Father",s.father],
+    ["Mother",s.mother||"-"],
+    ["Roll",s.roll],
+    ["Class",s.className+"-"+s.section],
+    ["Admission No",s.admission||"-"],
+    ["DOB",s.dob||"-"],
+    ["Phone",s.phone||"-"],
+    ["Gross Fees",money(f.gross)],
+    ["Concession",money(f.concession)],
+    ["Concession Reason",s.concessionReason||"No Concession"],
+    ["Net Payable",money(f.total)],
+    ["Fees Submitted",money(f.paid)],
+    ["Remaining Fee",money(f.due)]
+   ]
+  )
+ }
+
+ </div>
+
+ `);
+}
+
+
+/* =====================================================
+ COMPLETE PDF BACKUP
+===================================================== */
+
+function printAllResults(){
+
+ let pages="";
+
+ db.students.forEach(s=>{
+
+  let r=
+  db.results.find(
+   x=>x.studentId===s.id
+  );
+
+  if(r){
+
+   pages+=
+   buildReportCardHTML(s,r);
+
+  }
+
+ });
+
+ if(!pages){
+
+  alert(
+   "No result data available."
+  );
+
+  return;
+ }
+
+ printDocument(pages);
+}
+
+function printAllFeeReport(){
+
+ let rows=
+ db.students.map(s=>{
+
+  let f=
+  studentFeeCalculation(s);
+
+  return[
+   s.id,
+   s.name,
+   s.father,
+   s.roll,
+   s.className+"-"+s.section,
+   money(f.gross),
+   money(f.concession),
+   money(f.total),
+   money(f.paid),
+   money(f.due)
+  ];
+
+ });
+
+ printDocument(`
+
+ <div style="
+  width:196mm;
+  margin:auto;
+  font-family:Arial;
+ ">
+
+ ${schoolHeader()}
+
+ <h2 style="text-align:center">
+  COMPLETE FEE REPORT
+ </h2>
+
+ ${
+  htmlTable(
+   [
+    "Student ID",
+    "Student",
+    "Father",
+    "Roll",
+    "Class",
+    "Gross",
+    "Concession",
+    "Net Fee",
+    "Paid",
+    "Due"
+   ],
+   rows
+  )
+ }
+
+ </div>
+
+ `);
+}
+
+function printAllAttendance(){
+
+ let rows=
+ db.attendance.map(a=>{
+
+  let s=
+  db.students.find(
+   x=>x.id===a.studentId
+  );
+
+  return[
+   a.date,
+   s?.name||"-",
+   s?.father||"-",
+   s?.roll||"-",
+   s
+   ? s.className+"-"+s.section
+   : "-",
+   a.status
+  ];
+
+ });
+
+ printDocument(`
+
+ <div style="
+  width:196mm;
+  margin:auto;
+  font-family:Arial;
+ ">
+
+ ${schoolHeader()}
+
+ <h2 style="text-align:center">
+  COMPLETE ATTENDANCE REPORT
+ </h2>
+
+ ${
+  htmlTable(
+   [
+    "Date",
+    "Student",
+    "Father",
+    "Roll",
+    "Class",
+    "Status"
+   ],
+   rows
+  )
+ }
+
+ </div>
+
+ `);
+}
+
+function printStudentRegister(){
+
+ printDocument(`
+
+ <div style="
+  width:196mm;
+  margin:auto;
+  font-family:Arial;
+ ">
+
+ ${schoolHeader()}
+
+ <h2 style="text-align:center">
+  STUDENT REGISTER
+ </h2>
+
+ ${
+  htmlTable(
+   [
+    "ID",
+    "Name",
+    "Father",
+    "Roll",
+    "Class",
+    "Section",
+    "Admission No"
+   ],
+
+   db.students.map(s=>[
+    s.id,
+    s.name,
+    s.father,
+    s.roll,
+    s.className,
+    s.section,
+    s.admission
+   ])
+  )
+ }
+
+ </div>
+
+ `);
+}
+
+function printSelectedFeeStructure(){
+
+ let c=
+ $("feeStructureClass").value;
+
+ let rows=
+ classFeeRows(c);
+
+ let total=
+ rows.reduce(
+  (sum,x)=>
+  sum+
+  (
+   x.frequency==="monthly"
+   ? Number(x.amount)*12
+   : Number(x.amount)
+  ),
+  0
+ );
+
+ printDocument(`
+
+ <div style="
+  width:196mm;
+  margin:auto;
+  font-family:Arial;
+ ">
+
+ ${schoolHeader()}
+
+ <h2 style="text-align:center">
+  FEE STRUCTURE -
+  ${escapeHTML(c)}
+ </h2>
+
+ ${
+  htmlTable(
+   [
+    "Fee Type",
+    "Amount",
+    "Frequency",
+    "Session Total"
+   ],
+
+   rows.map(x=>[
+
+    x.type,
+
+    money(x.amount),
+
+    x.frequency==="monthly"
+    ? "Monthly"
+    : "Once Per Session",
+
+    money(
+     x.frequency==="monthly"
+     ? Number(x.amount)*12
+     : Number(x.amount)
+    )
+
+   ])
+  )
+ }
+
+ <h3 style="text-align:right">
+  Total Session Fee:
+  ${money(total)}
+ </h3>
+
+ </div>
+
+ `);
+}
+
+
+/* =====================================================
+ DATABASE BACKUP
+===================================================== */
+
+function databaseBackup(){
+
+ let blob=
+ new Blob(
+  [
+   JSON.stringify(
+    db,
+    null,
+    2
+   )
+  ],
+  {
+   type:"application/json"
+  }
+ );
+
+ let a=
+ document.createElement("a");
+
+ a.href=
+ URL.createObjectURL(blob);
+
+ a.download=
+ `SchoolERP_FULL_BACKUP_${todayISO()}.json`;
+
+ a.click();
+
+ URL.revokeObjectURL(a.href);
+}
+
+function restoreDatabase(event){
+
+ let file=
+ event.target.files[0];
+
+ if(!file)return;
+
+ let reader=
+ new FileReader();
+
+ reader.onload=async ()=>{
+
+  try{
+
+   let data=
+   JSON.parse(reader.result);
+
+   if(
+    !data.students ||
+    !data.school
+   ){
+
+    throw new Error(
+     "Invalid database"
+    );
+
+   }
+
+   if(
+    await showConfirm(
+     "Current database will be replaced. Continue?"
+    )
+   ){
+
+    db=data;
+
+    if(!db.classSubjects)
+     db.classSubjects={};
+
+    if(!db.payments)
+     db.payments=[];
+
+    if(!db.attendance)
+     db.attendance=[];
+
+    if(!db.results)
+     db.results=[];
+
+    saveDB();
+
+    alert(
+     "Database restored successfully."
+    );
+
+   }
+
+  }catch{
+
+   alert(
+    "Invalid backup file."
+   );
+
+  }
+
+ };
+
+ reader.readAsText(file);
+
+ event.target.value="";
+}
+
+
+/* =====================================================
+ CSV / EXCEL-COMPATIBLE EXPORT
+===================================================== */
+
+function downloadCSV(filename,rows){
+
+ let csv=
+ rows.map(row=>
+
+  row.map(value=>
+
+   `"${String(value??"")
+    .replaceAll('"','""')}"`
+
+  ).join(",")
+
+ ).join("\n");
+
+ let blob=
+ new Blob(
+  ["\ufeff"+csv],
+  {
+   type:"text/csv;charset=utf-8"
+  }
+ );
+
+ let a=
+ document.createElement("a");
+
+ a.href=
+ URL.createObjectURL(blob);
+
+ a.download=filename;
+
+ a.click();
+
+ URL.revokeObjectURL(a.href);
+}
+
+function exportStudentsCSV(){
+
+ downloadCSV(
+  "Students.csv",
+  [
+   [
+    "Student ID",
+    "Name",
+    "Father",
+    "Mother",
+    "Roll",
+    "Class",
+    "Section",
+    "Admission No",
+    "DOB",
+    "Phone",
+    "Concession",
+    "Concession Reason"
+   ],
+
+   ...db.students.map(s=>[
+
+    s.id,
+    s.name,
+    s.father,
+    s.mother,
+    s.roll,
+    s.className,
+    s.section,
+    s.admission,
+    s.dob,
+    s.phone,
+    s.concession||0,
+    s.concessionReason||""
+
+   ])
+  ]
+ );
+}
+
+function exportFeesCSV(){
+
+ downloadCSV(
+  "Fees.csv",
+  [
+   [
+    "Receipt",
+    "Student ID",
+    "Student",
+    "Father",
+    "Roll",
+    "Class",
+    "Fee Type",
+    "Amount",
+    "Date",
+    "Mode"
+   ],
+
+   ...db.payments.map(p=>{
+
+    let s=
+    db.students.find(
+     x=>x.id===p.studentId
+    );
+
+    return[
+
+     p.receipt,
+     p.studentId,
+     s?.name||"",
+     s?.father||"",
+     s?.roll||"",
+     s
+     ? s.className+"-"+s.section
+     : "",
+     p.feeType,
+     p.amount,
+     p.date,
+     p.mode
+
+    ];
+
+   })
+  ]
+ );
+}
+
+function exportAttendanceCSV(){
+
+ downloadCSV(
+  "Attendance.csv",
+  [
+   [
+    "Student ID",
+    "Student",
+    "Father",
+    "Roll",
+    "Class",
+    "Date",
+    "Status"
+   ],
+
+   ...db.attendance.map(a=>{
+
+    let s=
+    db.students.find(
+     x=>x.id===a.studentId
+    );
+
+    return[
+
+     a.studentId,
+     s?.name||"",
+     s?.father||"",
+     s?.roll||"",
+     s
+     ? s.className+"-"+s.section
+     : "",
+     a.date,
+     a.status
+
+    ];
+
+   })
+  ]
+ );
+}
+
+function exportResultsCSV(){
+
+ let rows=[
+
+  [
+   "Student ID",
+   "Student",
+   "Father",
+   "Roll",
+   "Class",
+   "Subject",
+   "Quarterly Max",
+   "Quarterly Obt",
+   "Half Yearly Max",
+   "Half Yearly Obt",
+   "Annual Max",
+   "Annual Obt",
+   "Grand Max",
+   "Grand Obt"
+  ]
+
+ ];
+
+ db.results.forEach(r=>{
+
+  let s=
+  db.students.find(
+   x=>x.id===r.studentId
+  );
+
+  r.subjects.forEach(x=>{
+
+   let grandMax=
+   Number(x.quarterly.max)
+   +
+   Number(x.halfYearly.max)
+   +
+   Number(x.annual.max);
+
+   let grandObt=
+   Number(x.quarterly.obtained)
+   +
+   Number(x.halfYearly.obtained)
+   +
+   Number(x.annual.obtained);
+
+   rows.push([
+
+    r.studentId,
+    s?.name||"",
+    s?.father||"",
+    s?.roll||"",
+    s
+    ? s.className+"-"+s.section
+    : "",
+    x.subject,
+
+    x.quarterly.max,
+    x.quarterly.obtained,
+
+    x.halfYearly.max,
+    x.halfYearly.obtained,
+
+    x.annual.max,
+    x.annual.obtained,
+
+    grandMax,
+    grandObt
+
+   ]);
+
+  });
+
+ });
+
+ downloadCSV(
+  "Results.csv",
+  rows
+ );
+}
+
+function exportStudentCSV(){
+
+ let s=currentStudent();
+
+ if(!s)return;
+
+ let f=
+ studentFeeCalculation(s);
+
+ let rows=[
+
+  ["COMPLETE STUDENT RECORD"],
+
+  ["Student ID",s.id],
+  ["Student Name",s.name],
+  ["Father Name",s.father],
+  ["Mother Name",s.mother],
+  ["Roll",s.roll],
+  ["Class",s.className],
+  ["Section",s.section],
+  ["Admission No",s.admission],
+
+  [],
+
+  ["FEE SUMMARY"],
+
+  ["Gross Fee",f.gross],
+  ["Concession",f.concession],
+  ["Concession Reason",s.concessionReason||""],
+  ["Net Payable",f.total],
+  ["Paid",f.paid],
+  ["Due",f.due],
+
+  [],
+
+  ["PAYMENTS"],
+
+  [
+   "Receipt",
+   "Date",
+   "Fee Type",
+   "Month",
+   "Amount",
+   "Mode"
+  ],
+
+  ...db.payments
+  .filter(
+   p=>p.studentId===s.id
+  )
+  .map(p=>[
+   p.receipt,
+   p.date,
+   p.feeType,
+   p.month,
+   p.amount,
+   p.mode
+  ]),
+
+  [],
+
+  ["ATTENDANCE"],
+
+  ["Date","Status"],
+
+  ...db.attendance
+  .filter(
+   a=>a.studentId===s.id
+  )
+  .map(a=>[
+   a.date,
+   a.status
+  ])
+
+ ];
+
+ downloadCSV(
+  `${safeFilename(s.name)}_${safeFilename(s.roll)}_Complete_Record.csv`,
+  rows
+ );
+}
+
+
+/* =====================================================
+ RENDER
+===================================================== */
+
+function renderAll(){
+
+ /* Preserve selected setup classes */
+
+ let selectedSubjectSetupClass =
+  $("subjectSetupClass")?.value || "";
+
+ let selectedResultSetupClass =
+  $("resultSetupClass")?.value || "";
+
+
+ let options=
+ arr=>
+ arr.map(
+  x=>
+  `<option>${escapeHTML(x)}</option>`
+ ).join("");
+
+ $("brandSchool").innerText=
+ db.school.name;
+
+ $("dashboardSchool").innerText=
+ db.school.name;
+
+ $("dashboardSession").innerText=
+ "Session "+db.school.session;
+
+ $("studentClass").innerHTML =
+ `<option value="">Select Class *</option>` +
+ db.classes.map(c =>
+  `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`
+ ).join("");
+
+$("studentSection").innerHTML =
+ `<option value="">Select Section *</option>` +
+ db.sections.map(s =>
+  `<option value="${escapeHTML(s)}">${escapeHTML(s)}</option>`
+ ).join("");
+
+ $("feeStructureClass").innerHTML=
+ options(db.classes);
+
+ $("feeStructureType").innerHTML=
+ options(db.feeTypes);
+
+ $("paymentFeeType").innerHTML=
+ options(db.feeTypes);
+
+ /* CLASS SUBJECT SETUP */
+
+if($("subjectSetupClass")){
+
+ $("subjectSetupClass").innerHTML =
+  options(db.classes);
+
+ if(
+  selectedSubjectSetupClass &&
+  db.classes.includes(
+   selectedSubjectSetupClass
+  )
+ ){
+
+  $("subjectSetupClass").value =
+   selectedSubjectSetupClass;
+
+ }
+
+}
+
+
+/* RESULT SETUP */
+
+if($("resultSetupClass")){
+
+ $("resultSetupClass").innerHTML =
+  options(db.classes);
+
+ if(
+  selectedResultSetupClass &&
+  db.classes.includes(
+   selectedResultSetupClass
+  )
+ ){
+
+  $("resultSetupClass").value =
+   selectedResultSetupClass;
+
+ }
+
+}
+
+/* ATTENDANCE DROPDOWNS */
+
+if($("attendanceClass")){
+
+ $("attendanceClass").innerHTML=
+ options(db.classes);
+
+}
+
+if($("attendanceSection")){
+
+ $("attendanceSection").innerHTML=
+ options(db.sections);
+
+}
+
+if($("attendanceReportClass")){
+
+ $("attendanceReportClass").innerHTML=
+ options(db.classes);
+
+}
+
+if($("attendanceReportSection")){
+
+ $("attendanceReportSection").innerHTML=
+ options(db.sections);
+
+}
+
+if($("attendanceSetupClass")){
+
+ $("attendanceSetupClass").innerHTML=
+ options(db.classes);
+
+}
+
+if($("attendanceSetupSession")){
+
+ $("attendanceSetupSession").value=
+ db.school.session;
+
+}
+
+ let studentOptions=
+ db.students.map(s=>`
+
+ <option value="${s.id}">
+
+  ${escapeHTML(s.name)}
+
+  | Father:
+  ${escapeHTML(s.father)}
+
+  | Roll:
+  ${escapeHTML(s.roll)}
+
+  | ${escapeHTML(s.className)}
+  -${escapeHTML(s.section)}
+
+ </option>
+
+ `).join("");
+
+ if($("paymentStudent")){
+  filterPaymentStudents();
+ }
+
+ if($("classFeeReportClass")){
+
+  const currentClass = $("classFeeReportClass").value;
+
+  $("classFeeReportClass").innerHTML =
+   `<option value="">Select Class</option>` +
+   options(db.classes);
+
+  if(
+   currentClass &&
+   db.classes.includes(currentClass)
+  ){
+   $("classFeeReportClass").value = currentClass;
+  }
+
+  renderClassFeeDueReport();
+
+ }
+
+
+/* RESULT STUDENT SEARCH / DROPDOWN */
+
+if($("resultStudentSearch")){
+
+ filterResultStudents();
+
+}else{
+
+ $("resultStudent").innerHTML=
+ studentOptions;
+
+}
+
+ let school=
+ schoolFeeCalculation();
+
+ $("dashStudents").innerText=
+ db.students.length;
+
+ $("dashGrossFee").innerText=
+ money(school.gross);
+
+ $("dashConcession").innerText=
+ money(school.concession);
+
+ $("dashTotalFee").innerText=
+ money(school.total);
+
+ $("dashCollection").innerText=
+ money(school.paid);
+
+ $("dashDue").innerText=
+ money(school.due);
+
+ let today=
+ todayISO();
+
+ let todayCollection=
+ db.payments
+ .filter(
+  p=>p.dateISO===today
+ )
+ .reduce(
+  (a,b)=>
+  a+Number(b.amount||0),
+  0
+ );
+
+ $("dashToday").innerText=
+ money(todayCollection);
+
+ let month=
+ today.slice(0,7);
+
+ let monthCollection=
+ db.payments
+ .filter(
+  p=>
+  String(p.dateISO||"")
+  .startsWith(month)
+ )
+ .reduce(
+  (a,b)=>
+  a+Number(b.amount||0),
+  0
+ );
+
+ $("dashMonth").innerText=
+ money(monthCollection);
+
+ $("recentPayments").innerHTML=
+ [...db.payments]
+ .reverse()
+ .slice(0,10)
+ .map(p=>{
+
+  let s=
+  db.students.find(
+   x=>x.id===p.studentId
+  );
+
+  return`
+
+  <tr>
+
+   <td>${escapeHTML(p.receipt)}</td>
+
+   <td>${escapeHTML(s?.name||"-")}</td>
+
+   <td>${escapeHTML(s?.father||"-")}</td>
+
+   <td>
+    ${escapeHTML(
+     s
+     ? s.className+"-"+s.section
+     : "-"
+    )}
+   </td>
+
+   <td>${escapeHTML(p.date)}</td>
+
+   <td>${escapeHTML(p.feeType)}</td>
+
+   <td>${money(p.amount)}</td>
+
+   <td>
+
+    <button
+     class="btn small"
+     onclick="printReceipt('${p.id}')">
+     Receipt
+    </button>
+
+   </td>
+
+  </tr>
+
+  `;
+
+ }).join("");
+
+ $("feeStructureList").innerHTML=
+ db.feeStructures.map(f=>`
+
+ <tr>
+
+  <td>${escapeHTML(f.className)}</td>
+
+  <td>${escapeHTML(f.type)}</td>
+
+  <td>${money(f.amount)}</td>
+
+  <td>
+   ${
+    f.frequency==="monthly"
+    ? "Monthly"
+    : "Once Per Session"
+   }
+  </td>
+
+  <td>
+
+   <button
+    class="btn red small"
+    onclick="deleteFeeStructure('${f.id}')">
+    Delete
+   </button>
+
+  </td>
+
+ </tr>
+
+ `).join("");
+
+ $("schoolName").value=
+ db.school.name||"";
+
+ $("schoolSubtitle").value=
+ db.school.subtitle||"";
+
+ $("schoolAddress").value=
+ db.school.address||"";
+
+ $("schoolPhone").value=
+ db.school.phone||"";
+
+ $("schoolEmail").value=
+ db.school.email||"";
+
+ $("schoolUdise").value=
+ db.school.udise||"";
+
+ $("schoolSession").value=
+ db.school.session||"";
+
+ renderStudentSearch();
+
+ renderClassSubjectSetup();
+
+ if($("resultSetupClass")){
+ renderResultSetup();
+}
+
+ renderPaymentStudentSummary();
+
+ renderMasterData();
+
+ renderAttendanceWorkingDays();
+
+loadMonthlyClassAttendance();
+
+renderSessionAttendanceReport();
+
+ if(currentStudentID){
+
+  renderStudentProfile();
+
+ }
+
+ if(db.students.length){
+
+  loadResultForm();
+
+ }else{
+
+  $("marksEntryTable").innerHTML="";
+
+ }
+}
+/* =====================================================
+ STUDENT EDIT
+===================================================== */
+
+function editStudent(id){
+
+ let s=
+ db.students.find(x=>x.id===id);
+
+ if(!s){
+  alert("Student not found.");
+  return;
+ }
+
+ $("editStudentID").value=s.id || "";
+
+ $("studentName").value=s.name || "";
+ $("fatherName").value=s.father || "";
+ $("motherName").value=s.mother || "";
+ $("rollNumber").value=s.roll || "";
+ $("admissionNumber").value=s.admission || "";
+ $("dob").value=s.dob || "";
+
+ $("studentClass").value=s.className || "";
+ $("studentSection").value=s.section || "";
+
+ $("studentPhone").value=s.phone || "";
+ $("admissionDate").value=s.admissionDate || "";
+ $("transportRoute").value=s.transportRoute || "";
+
+ $("studentConcession").value=
+ Number(s.concession || 0);
+
+ $("concessionReason").value=
+ s.concessionReason || "";
+
+ $("concessionRemarks").value=
+ s.concessionRemarks || "";
+
+ showPage("students");
+
+ window.scrollTo(0,0);
+}
+
+
+/* =====================================================
+ STUDENT DELETE - SQLITE
+===================================================== */
+
+async function deleteStudent(id){
+
+ let s=
+ db.students.find(x=>x.id===id);
+
+ if(!s){
+  alert("Student not found.");
+  return;
+ }
+
+ let ok=await showConfirm(
+  "Delete student "+s.name+"?\n\n"+
+  "Student cannot be deleted if Fees, Attendance or Result records are linked."
+ );
+
+ if(!ok)return;
+
+ try{
+
+  let result=
+  await window.schoolAPI.deleteStudent(id);
+
+  if(!result || !result.success){
+
+   alert(
+    result?.message ||
+    "Student could not be deleted."
+   );
+
+   return;
+  }
+
+  db.students=
+  await window.schoolAPI.getStudents();
+
+  if(currentStudentID===id){
+   currentStudentID=null;
+  }
+
+  renderAll();
+
+  alert("Student deleted successfully.");
+
+ }catch(error){
+
+  console.error(
+   "Student Delete Error:",
+   error
+  );
+
+  alert(
+   "Database Error:\n"+
+   error.message
+  );
+
+ }
+
+}
+
+
+/* =====================================================
+ OPEN STUDENT PROFILE
+===================================================== */
+
+function openStudent(id){
+
+ let student=
+ db.students.find(s=>s.id===id);
+
+ if(!student){
+
+  alert("Student not found.");
+  return;
+
+ }
+
+ currentStudentID=id;
+
+ renderStudentProfile();
+
+ showPage("studentProfile");
+}
+
+
+/* =====================================================
+ CURRENT STUDENT
+===================================================== */
+
+function currentStudent(){
+
+ return db.students.find(
+  s=>s.id===currentStudentID
+ ) || null;
+
+}
+
+
+/* =====================================================
+ UTILITIES
+===================================================== */
+
+function money(value){
+
+ return"₹"+
+ Number(value||0)
+ .toLocaleString(
+  "en-IN",
+  {
+   minimumFractionDigits:2,
+   maximumFractionDigits:2
+  }
+ );
+}
+
+function todayISO(){
+
+ let d=new Date();
+
+ return[
+  d.getFullYear(),
+  String(
+   d.getMonth()+1
+  ).padStart(2,"0"),
+  String(
+   d.getDate()
+  ).padStart(2,"0")
+ ].join("-");
+}
+
+function htmlTable(headers,rows){
+
+ return`
+
+ <table style="
+  width:100%;
+  border-collapse:collapse;
+ ">
+
+  <thead>
+
+   <tr>
+
+    ${
+     headers.map(
+      h=>`<th>${h}</th>`
+     ).join("")
+    }
+
+   </tr>
+
+  </thead>
+
+  <tbody>
+
+   ${
+    rows.length
+    ?
+    rows.map(row=>`
+
+     <tr>
+
+      ${
+       row.map(
+        cell=>
+        `<td>${cell??""}</td>`
+       ).join("")
+      }
+
+     </tr>
+
+    `).join("")
+    :
+    `
+    <tr>
+     <td colspan="${headers.length}">
+      No records available.
+     </td>
+    </tr>
+    `
+   }
+
+  </tbody>
+
+ </table>
+
+ `;
+}
+
+function escapeHTML(value){
+
+ return String(value??"")
+
+ .replaceAll("&","&amp;")
+
+ .replaceAll("<","&lt;")
+
+ .replaceAll(">","&gt;")
+
+ .replaceAll('"',"&quot;")
+
+ .replaceAll("'","&#039;");
+}
+
+function safeFilename(value){
+
+ return String(value||"file")
+ .replace(
+  /[<>:"/\\|?*]+/g,
+  "_"
+ );
+}
+
+
+/* =====================================================
+ START
+===================================================== */
+
+let attendanceDefaultMonth=
+ todayISO().slice(0,7);
+
+if($("attendanceMonth"))
+ $("attendanceMonth").value=
+ attendanceDefaultMonth;
+
+if($("attendanceSetupMonth"))
+ $("attendanceSetupMonth").value=
+ attendanceDefaultMonth;
+
+
+/* =====================================================
+   APPLICATION START
+===================================================== */
+
+async function startApplication(){
+
+ try{
+
+  /*
+   1. Existing application settings
+  */
+
+  await loadSettingsFromSQLite();
+
+  await loadMasterDataFromDatabase();
+
+
+  /*
+   2. Students
+  */
+
+  await loadStudentsFromDatabase();
+
+
+  /*
+   3. Class-wise Subjects
+  */
+
+  await loadClassSubjectsFromDatabase();
+
+   /*
+   4. Class-wise Result Setup
+  */
+
+  await loadResultSetupsFromDatabase();
+
+
+  /*
+   5. Fee + Attendance + Results
+  */
+
+  await loadFeeStructuresFromDatabase();
+
+  await loadPaymentsFromDatabase();
+
+  await loadAttendanceWorkingDaysFromDatabase();
+
+  await loadStudentAttendanceFromDatabase();
+
+  await loadStudentResultsFromDatabase();
+
+
+  /*
+   Final render only after loading
+  */
+
+  renderAll();
+
+
+  console.log(
+   "Application started successfully."
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "Application Startup Error:",
+   error
+  );
+
+
+  /*
+   Existing local data fallback
+  */
+
+  renderAll();
+
+ }
+
+}
+
+/* START APPLICATION */
+
+startApplication();
+
+</script>
+
+
+
+</body>
+</html>

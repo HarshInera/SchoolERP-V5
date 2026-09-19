@@ -1,0 +1,46 @@
+{
+  "name": "schoolmanagement",
+  "version": "1.0.0",
+  "description": "Offline School Management ERP for Windows",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "keywords": [],
+  "author": "School ERP",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^43.3.0",
+    "electron-builder": "^26.0.12"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.2"
+  },
+  "build": {
+    "appId": "in.schoolerp.desktop",
+    "productName": "School ERP",
+    "asar": true,
+    "files": [
+      "index.html",
+      "license.html",
+      "main.js",
+      "preload.js",
+      "database.js",
+      "license.js",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
